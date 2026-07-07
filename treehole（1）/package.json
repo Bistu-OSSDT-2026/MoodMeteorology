@@ -1,0 +1,13 @@
+{
+  "name": "treehole",
+  "version": "1.0.0",
+  "description": "树洞 · 说出来，没关系",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

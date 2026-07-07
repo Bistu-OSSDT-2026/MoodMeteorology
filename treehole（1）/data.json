@@ -1,0 +1,270 @@
+{
+  "posts": [
+    {
+      "id": "seed_1",
+      "mood": "happy",
+      "text": "今天阳台的多肉开花了，一件很小的事，却让我开心了一整天。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 34,
+      "createdAt": "2026-07-07T11:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbbsm4ba",
+          "text": "这种小确幸真的会让人一整天都有力气～",
+          "nick": "安静的风",
+          "mood": "calm",
+          "createdAt": "2026-07-07T12:19:08.230Z"
+        },
+        {
+          "id": "mraodrrbpv8k84",
+          "text": "多肉开花超级难得，恭喜你！",
+          "nick": "纸飞机",
+          "mood": "happy",
+          "createdAt": "2026-07-07T12:38:56.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_2",
+      "mood": "calm",
+      "text": "没什么大事发生，只是想找个地方，安静地写下今天的心情。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 21,
+      "createdAt": "2026-07-07T09:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbbyv9r1",
+          "text": "平静也是一种很好的状态啦",
+          "nick": "路过的云",
+          "mood": "calm",
+          "createdAt": "2026-07-07T10:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_3",
+      "mood": "sad",
+      "text": "好像什么都没做好，又是emo的一天，希望明天会好一点。",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "seed",
+      "hugCount": 58,
+      "createdAt": "2026-07-07T07:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbo6cnvh",
+          "text": "辛苦了，今天先好好休息吧",
+          "nick": "抱枕小熊",
+          "mood": "calm",
+          "createdAt": "2026-07-07T08:19:08.230Z"
+        },
+        {
+          "id": "mraodrrbm4qypi",
+          "text": "抱抱你，明天一定会不一样的",
+          "nick": "漂流瓶",
+          "mood": "sad",
+          "createdAt": "2026-07-07T11:19:08.230Z"
+        },
+        {
+          "id": "mraodrrbzpd6tc",
+          "text": "我也是，我们一起加油",
+          "nick": "数星星的人",
+          "mood": "hopeful",
+          "createdAt": "2026-07-07T12:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_4",
+      "mood": "anxious",
+      "text": "最近总是有点心不在焉，不知道自己到底在焦虑什么。",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "seed",
+      "hugCount": 19,
+      "createdAt": "2026-07-07T05:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrb9nnjsy",
+          "text": "有时候不知道原因也没关系，先照顾好自己",
+          "nick": "小雨伞",
+          "mood": "calm",
+          "createdAt": "2026-07-07T07:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_5",
+      "mood": "upset",
+      "text": "今天真的很烦躁，什么事都不顺，需要一个安静的角落。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 27,
+      "createdAt": "2026-07-07T03:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbzo1ysj",
+          "text": "深呼吸，一切都会过去的",
+          "nick": "躲雨的猫",
+          "mood": "calm",
+          "createdAt": "2026-07-07T04:19:08.230Z"
+        },
+        {
+          "id": "mraodrrbsk9n4y",
+          "text": "这里就是安静的角落，多待一会儿吧",
+          "nick": "深夜电台",
+          "mood": "calm",
+          "createdAt": "2026-07-07T06:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_6",
+      "mood": "happy",
+      "text": "坚持记录心情满一个月啦，谢谢一直在看我碎碎念的你们。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 63,
+      "createdAt": "2026-07-07T01:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbjik6p7",
+          "text": "一个月啦，太棒了！继续加油～",
+          "nick": "慢半拍先生",
+          "mood": "happy",
+          "createdAt": "2026-07-07T02:19:08.230Z"
+        },
+        {
+          "id": "mraodrrbnchwk5",
+          "text": "见证了你的坚持，很感动",
+          "nick": "晒太阳的鱼",
+          "mood": "grateful",
+          "createdAt": "2026-07-07T05:19:08.230Z"
+        },
+        {
+          "id": "mraodrrb3bt1kk",
+          "text": "下一个月也要一起记录呀",
+          "nick": "路过的云",
+          "mood": "hopeful",
+          "createdAt": "2026-07-07T08:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_7",
+      "mood": "grateful",
+      "text": "谢谢今天陌生人递给我的那把伞，小小的善意会被记很久。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 41,
+      "createdAt": "2026-07-06T23:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbcf3pix",
+          "text": "这种小小的善意真的很治愈",
+          "nick": "漂流瓶",
+          "mood": "grateful",
+          "createdAt": "2026-07-07T01:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_8",
+      "mood": "lonely",
+      "text": "一个人吃饭一个人走路，今天格外觉得安静得有点空。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 23,
+      "createdAt": "2026-07-06T21:19:08.230Z",
+      "comments": []
+    },
+    {
+      "id": "seed_9",
+      "mood": "hopeful",
+      "text": "投了很久的简历终于有回音了，希望这次能顺利一点。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 30,
+      "createdAt": "2026-07-06T19:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbdck7v3",
+          "text": "加油，相信会有好结果的",
+          "nick": "纸飞机",
+          "mood": "hopeful",
+          "createdAt": "2026-07-06T21:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_10",
+      "mood": "tired",
+      "text": "连续加班一周了，只想好好睡一觉，什么都不想干。",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "seed",
+      "hugCount": 37,
+      "createdAt": "2026-07-06T17:19:08.230Z",
+      "comments": [
+        {
+          "id": "mraodrrbr447de",
+          "text": "辛苦了，早点休息吧",
+          "nick": "安静的风",
+          "mood": "calm",
+          "createdAt": "2026-07-06T19:19:08.230Z"
+        },
+        {
+          "id": "mraodrrbqb7u7c",
+          "text": "工作再忙也要照顾好自己呀",
+          "nick": "抱枕小熊",
+          "mood": "calm",
+          "createdAt": "2026-07-06T22:19:08.230Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_11",
+      "mood": "wronged",
+      "text": "明明不是我的错，却要我来道歉，心里有点委屈。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 25,
+      "createdAt": "2026-07-06T15:19:08.230Z",
+      "comments": []
+    },
+    {
+      "id": "mrap1ls7x4iycw",
+      "mood": "happy",
+      "text": "测试111，",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "u_mraoyyznmjte",
+      "hugCount": 0,
+      "createdAt": "2026-07-07T13:37:40.231Z",
+      "expireAt": "2026-07-08T13:37:40.231Z",
+      "comments": []
+    },
+    {
+      "id": "mrap28ug3nu4qv",
+      "mood": "happy",
+      "text": "222222",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "u_mrap1z8gy1bc",
+      "hugCount": 0,
+      "createdAt": "2026-07-07T13:38:10.120Z",
+      "expireAt": "2026-07-08T13:38:10.120Z",
+      "comments": []
+    }
+  ]
+}
