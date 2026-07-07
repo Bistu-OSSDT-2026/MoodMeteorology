@@ -120,11 +120,60 @@ button{font-family:inherit; cursor:pointer;}
 .confirm-bar button{padding:6px 16px; border-radius:999px; font-size:12px; border:1px solid var(--border); background:var(--bg);}
 .confirm-bar button.danger{background:var(--m-upset); color:#fff; border:none;}
 
-.section-title{font-size:15px; font-weight:600; color:var(--ink-soft); margin:0 0 16px; display:flex; align-items:center; gap:8px;}
+.section-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; flex-wrap:wrap;}
+.section-title{font-size:15px; font-weight:600; color:var(--ink-soft); margin:0; display:flex; align-items:center; gap:8px;}
 .section-title .icon{width:16px; height:16px; color:var(--accent-dawn);}
+
+.bottle-btn{
+  display:flex; align-items:center; gap:7px; padding:9px 18px; border-radius:999px;
+  border:1.5px solid var(--border); background:var(--bg-elevated); color:var(--ink-soft); font-size:13px;
+  transition:all var(--transition);
+}
+.bottle-btn .icon{width:16px; height:16px; color:var(--accent-dawn);}
+.bottle-btn:hover{border-color:var(--accent-dawn); color:var(--ink); transform:translateY(-1px);}
 
 .empty-state{text-align:center; padding:60px 20px; color:var(--ink-faint); border:1.5px dashed var(--border); border-radius:var(--radius-m);}
 .empty-state .icon{width:30px; height:30px; margin-bottom:10px; opacity:.6;}
+
+/* ---- 漂流瓶弹窗 ---- */
+.bottle-overlay{
+  position:fixed; inset:0; background:rgba(20,18,15,.45); backdrop-filter:blur(3px);
+  display:flex; align-items:center; justify-content:center; z-index:200; padding:20px;
+  opacity:0; pointer-events:none; transition:opacity var(--transition);
+}
+.bottle-overlay.show{opacity:1; pointer-events:auto;}
+.bottle-card{
+  background:var(--bg-elevated); border-radius:var(--radius-l); padding:28px;
+  max-width:420px; width:100%; transform:translateY(14px) scale(.96); opacity:0;
+  transition:transform var(--transition), opacity var(--transition); box-shadow:0 24px 60px -20px rgba(0,0,0,.35);
+  position:relative;
+}
+.bottle-overlay.show .bottle-card{transform:translateY(0) scale(1); opacity:1;}
+.bottle-close{position:absolute; top:16px; right:16px; width:28px; height:28px; border-radius:50%; border:1px solid var(--border); background:var(--bg); color:var(--ink-faint); display:flex; align-items:center; justify-content:center;}
+.bottle-close .icon{width:13px; height:13px;}
+.bottle-head{display:flex; align-items:center; gap:8px; margin-bottom:16px; font-family:var(--font-display); font-size:15px; color:var(--ink-soft);}
+.bottle-head .icon{width:18px; height:18px; color:var(--accent-dawn);}
+.bottle-hint{font-size:11.5px; color:var(--ink-faint); margin:-10px 0 16px;}
+.bottle-content{background:var(--bg); border-radius:var(--radius-m); padding:18px; margin-bottom:18px;}
+.bottle-content .tag{display:inline-flex; align-items:center; font-size:11px; padding:3px 10px; border-radius:999px; margin-bottom:10px; color:#fff; font-weight:500;}
+.bottle-content p{margin:0; font-size:14.5px; color:var(--ink); line-height:1.75; word-break:break-word;}
+.bottle-reply textarea{
+  width:100%; min-height:70px; resize:none; padding:12px 14px; border-radius:var(--radius-m);
+  border:1.5px solid var(--border); background:var(--bg); color:var(--ink); font-family:var(--font-body);
+  font-size:14px; line-height:1.6; transition:border-color var(--transition);
+}
+.bottle-reply textarea::placeholder{color:var(--ink-faint); font-family:var(--font-hand); font-size:14.5px;}
+.bottle-reply textarea:focus{outline:none; border-color:var(--accent-sky);}
+.bottle-actions{display:flex; gap:10px; margin-top:14px;}
+.bottle-actions button{flex:1; padding:11px; border-radius:999px; font-size:13.5px; transition:all var(--transition);}
+.bottle-actions .again-btn{border:1px solid var(--border); background:var(--bg); color:var(--ink-soft);}
+.bottle-actions .again-btn:hover{border-color:var(--accent-sky); color:var(--ink);}
+.bottle-actions .send-btn{border:none; background:var(--accent-sky); color:#fff; font-weight:500;}
+.bottle-actions .send-btn:hover:not(:disabled){background:color-mix(in srgb, var(--accent-sky) 85%, #000);}
+.bottle-actions .send-btn:disabled{opacity:.45; cursor:not-allowed;}
+.bottle-sent{text-align:center; padding:10px 0; font-size:14px; color:var(--ink-soft); display:none;}
+.bottle-sent.show{display:block;}
+.bottle-sent .icon{width:26px; height:26px; color:var(--accent-sky); margin-bottom:8px;}
 
 .site-footer{border-top:1px solid var(--border); padding:40px 24px 32px; text-align:center; color:var(--ink-faint);}
 .site-footer .quote{font-family:var(--font-hand); font-size:22px; color:var(--ink-soft); margin:0 0 16px; min-height:32px; transition:opacity .35s ease;}
@@ -152,6 +201,7 @@ button{font-family:inherit; cursor:pointer;}
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-bottle" viewBox="0 0 24 24"><path d="M10 3h4M10.5 3v3.2c0 .5-.2 1-.6 1.4L8.6 8.9A3 3 0 0 0 7.5 11.2v7.3A2.5 2.5 0 0 0 10 21h4a2.5 2.5 0 0 0 2.5-2.5v-7.3a3 3 0 0 0-1.1-2.3l-1.3-1.3a2 2 0 0 1-.6-1.4V3M8 14h8"/></symbol>
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
 </svg>
 
@@ -191,9 +241,35 @@ button{font-family:inherit; cursor:pointer;}
   </aside>
 
   <main class="content-slot">
-    <h2 class="section-title"><svg class="icon"><use href="#i-hole"/></svg>树洞广场</h2>
+    <div class="section-head">
+      <h2 class="section-title"><svg class="icon"><use href="#i-hole"/></svg>树洞广场</h2>
+      <button class="bottle-btn" id="bottleBtn"><svg class="icon"><use href="#i-bottle"/></svg>捞一个漂流瓶</button>
+    </div>
     <div class="mood-grid" id="moodGrid"></div>
   </main>
+</div>
+
+<div class="bottle-overlay" id="bottleOverlay">
+  <div class="bottle-card">
+    <button class="bottle-close" id="bottleClose" aria-label="关闭"><svg class="icon"><use href="#i-close"/></svg></button>
+    <div class="bottle-head"><svg class="icon"><use href="#i-bottle"/></svg>捞到了一个漂流瓶</div>
+    <p class="bottle-hint">评论越少的心情，越容易被捞到——让冷门的心情也被看见</p>
+    <div class="bottle-content" id="bottleContent">
+      <span class="tag" id="bottleTag"></span>
+      <p id="bottleText"></p>
+    </div>
+    <div class="bottle-reply" id="bottleReplyArea">
+      <textarea id="bottleReplyInput" maxlength="200" placeholder="回一句暖心的话，悄悄放回树洞里……"></textarea>
+      <div class="bottle-actions">
+        <button type="button" class="again-btn" id="bottleAgain">再捞一个</button>
+        <button type="button" class="send-btn" id="bottleSend" disabled>送出暖心回应</button>
+      </div>
+    </div>
+    <div class="bottle-sent" id="bottleSent">
+      <svg class="icon"><use href="#i-hole"/></svg>
+      <div>这句话已经悄悄留在树洞里了</div>
+    </div>
+  </div>
 </div>
 
 <footer class="site-footer">
@@ -385,6 +461,99 @@ moodListEl.addEventListener('click', (e) => {
 });
 
 renderGrid();
+
+/* ==========================================================================
+   漂流瓶：随机捞一条心情，优先捞评论少的，可以直接暖心回应
+   ========================================================================== */
+const NICKNAMES = ['路过的云','半夜的猫','晒太阳的鱼','安静的风','抱枕小熊','漂流瓶','数星星的人','慢半拍先生','小雨伞','躲雨的猫','深夜电台','纸飞机'];
+
+/* 种子帖子的初始评论数（对应详情页 SEED_POSTS 里各自 comments 数组的长度）
+   这份数据本该和详情页共用一份，目前两个文件各自维护一份，后续建议拆成公共脚本文件统一管理 */
+const SEED_COMMENT_COUNTS = {'1':2,'2':1,'3':3,'4':1,'5':2,'6':3,'7':1,'8':0,'9':1,'10':2,'11':0};
+
+function getCommentCount(id, isSeed){
+  let extra = 0;
+  try { extra = JSON.parse(localStorage.getItem('treehole_comments_' + id) || '[]').length; } catch(e){}
+  return (isSeed ? (SEED_COMMENT_COUNTS[id] || 0) : 0) + extra;
+}
+
+function getAllPostsWithCounts(){
+  const stored = loadStoredPosts().map(p => ({id:p.id, mood:p.mood, text:p.text, isSeed:false}));
+  const seed = SEED_POSTS.map(p => ({id:p.id, mood:p.mood, text:p.text, isSeed:true}));
+  return [...stored, ...seed].map(p => ({...p, commentCount:getCommentCount(p.id, p.isSeed)}));
+}
+
+const bottleBtn = document.getElementById('bottleBtn');
+const bottleOverlay = document.getElementById('bottleOverlay');
+const bottleClose = document.getElementById('bottleClose');
+const bottleTag = document.getElementById('bottleTag');
+const bottleText = document.getElementById('bottleText');
+const bottleReplyArea = document.getElementById('bottleReplyArea');
+const bottleReplyInput = document.getElementById('bottleReplyInput');
+const bottleSend = document.getElementById('bottleSend');
+const bottleAgain = document.getElementById('bottleAgain');
+const bottleSent = document.getElementById('bottleSent');
+
+let currentBottle = null;
+
+function drawBottle(){
+  const all = getAllPostsWithCounts();
+  if (all.length === 0) return null;
+  const minCount = Math.min(...all.map(p => p.commentCount));
+  // 优先从"评论数最少"的一批里随机挑，让冷门的心情更容易被捞到；避免连续捞到同一条
+  let pool = all.filter(p => p.commentCount === minCount && (!currentBottle || p.id !== currentBottle.id));
+  if (pool.length === 0) pool = all.filter(p => !currentBottle || p.id !== currentBottle.id);
+  if (pool.length === 0) pool = all;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function showBottle(){
+  currentBottle = drawBottle();
+  if (!currentBottle) return;
+  bottleTag.style.background = 'var(--m-' + currentBottle.mood + ')';
+  bottleTag.textContent = MOODS[currentBottle.mood] ? MOODS[currentBottle.mood].label : '心情';
+  bottleText.textContent = currentBottle.text;
+  bottleReplyInput.value = '';
+  bottleSend.disabled = true;
+  bottleReplyArea.style.display = '';
+  bottleSent.classList.remove('show');
+}
+
+function openBottleModal(){
+  showBottle();
+  bottleOverlay.classList.add('show');
+}
+function closeBottleModal(){
+  bottleOverlay.classList.remove('show');
+}
+
+bottleBtn.addEventListener('click', openBottleModal);
+bottleClose.addEventListener('click', closeBottleModal);
+bottleOverlay.addEventListener('click', (e) => { if (e.target === bottleOverlay) closeBottleModal(); });
+bottleAgain.addEventListener('click', showBottle);
+
+bottleReplyInput.addEventListener('input', () => {
+  bottleSend.disabled = bottleReplyInput.value.trim().length === 0;
+});
+
+bottleSend.addEventListener('click', () => {
+  const text = bottleReplyInput.value.trim();
+  if (!text || !currentBottle) return;
+
+  const nick = NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)];
+  const moodKeys = Object.keys(MOODS);
+  const mood = moodKeys[Math.floor(Math.random() * moodKeys.length)];
+  const comment = { text, nick, mood, createdAt: Date.now() };
+
+  // 存法和详情页评论区完全一致，所以这条回应之后去详情页也能看到
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem('treehole_comments_' + currentBottle.id) || '[]'); } catch(e){ list = []; }
+  list.push(comment);
+  try { localStorage.setItem('treehole_comments_' + currentBottle.id, JSON.stringify(list)); } catch(e){}
+
+  bottleReplyArea.style.display = 'none';
+  bottleSent.classList.add('show');
+});
 
 /* ==========================================================================
    底部鼓励语：随机生成，每隔一段时间自动切换
