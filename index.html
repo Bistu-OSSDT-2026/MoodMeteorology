@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>树洞 - 匿名倾诉</title>
+  <link rel="stylesheet" href="/src/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+          <i class="fas fa-tree text-white text-sm"></i>
+        </div>
+        <span class="text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">树洞</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+          <i class="fas fa-search text-gray-600"></i>
+        </button>
+        <button class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+          <i class="fas fa-bell text-gray-600"></i>
+        </button>
+        <div class="w-8 h-8 rounded-full avatar-gradient flex items-center justify-center text-white text-sm font-medium">
+          U
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-4 py-6">
+    <section class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="w-10 h-10 rounded-full avatar-gradient flex items-center justify-center text-white flex-shrink-0">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="flex-1">
+          <textarea 
+            id="postContent"
+            class="w-full p-4 border border-gray-200 rounded-xl textarea-resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all bg-gray-50"
+            rows="3"
+            placeholder="说出你的秘密，这里是安全的树洞..."
+          ></textarea>
+          <div class="flex items-center justify-between mt-3">
+            <div class="flex items-center space-x-2">
+              <button class="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500">
+                <i class="fas fa-image"></i>
+              </button>
+              <button class="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500">
+                <i class="fas fa-smile"></i>
+              </button>
+              <button class="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500">
+                <i class="fas fa-map-marker-alt"></i>
+              </button>
+            </div>
+            <button 
+              id="submitBtn"
+              class="btn-primary text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all flex items-center space-x-2"
+            >
+              <span>发布</span>
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-gray-800">最新树洞</h2>
+      <div class="flex items-center space-x-2">
+        <button class="px-3 py-1.5 rounded-full text-sm font-medium bg-purple-100 text-purple-700">最新</button>
+        <button class="px-3 py-1.5 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">热门</button>
+        <button class="px-3 py-1.5 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">关注</button>
+      </div>
+    </section>
+
+    <div id="treeHoleList" class="space-y-4">
+    </div>
+
+    <div class="text-center py-6">
+      <button class="px-6 py-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors font-medium">
+        加载更多
+      </button>
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-gray-100 py-6 mt-8">
+    <div class="max-w-4xl mx-auto px-4 text-center text-gray-500 text-sm">
+      <p>树洞 - 匿名倾诉，温暖相伴</p>
+      <p class="mt-1">© 2024 树洞团队</p>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
