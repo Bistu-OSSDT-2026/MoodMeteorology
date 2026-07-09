@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>校园墙 · 树洞</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F7F4EE; --bg-elevated:#FFFFFF;
+  --ink:#2B2A28; --ink-soft:#6B6660; --ink-faint:#9C968C;
+  --border:rgba(43,42,40,.10); --shadow:rgba(43,42,40,.07);
+  --accent-sky:#7B93AE; --accent-sky-soft:#DCE4EC;
+  --accent-dawn:#E3A587; --accent-dawn-soft:#F6E4D8;
+  --mist:#C9C2B4;
+  --bg-glow-1:rgba(232,184,75,.10); --bg-glow-2:rgba(123,147,174,.08); --bg-glow-3:rgba(227,165,135,.07);
+
+  --m-happy:#E8B84B; --m-calm:#9FB4C7; --m-sad:#6E86A6; --m-upset:#A9615F; --m-anxious:#AFA0C4;
+  --m-grateful:#8FAE8A; --m-wronged:#C98FA0; --m-tired:#A89680; --m-lonely:#5F7290; --m-hopeful:#E0A97E;
+
+  --font-display:"Noto Serif SC", serif; --font-body:"Noto Sans SC", sans-serif; --font-hand:"Ma Shan Zheng", cursive;
+  --radius-s:10px; --radius-m:16px; --radius-l:28px;
+  --nav-h:64px; --container:820px; --transition:.28s cubic-bezier(.4,0,.2,1);
+}
+html.dark{
+  --bg:#14161D; --bg-elevated:#1C1F27;
+  --ink:#EAE6DD; --ink-soft:#A79F92; --ink-faint:#726B60;
+  --border:rgba(234,230,221,.08); --shadow:rgba(0,0,0,.35);
+  --accent-sky:#8FA8C2; --accent-sky-soft:#26303C;
+  --accent-dawn:#E8B79A; --accent-dawn-soft:#3A2C24; --mist:#3C3F49;
+  --bg-glow-1:rgba(227,165,135,.07); --bg-glow-2:rgba(143,168,194,.05); --bg-glow-3:rgba(232,183,108,.04);
+  --m-happy:#E3BD6C; --m-calm:#8FA4B8; --m-sad:#7189AA; --m-upset:#B47774; --m-anxious:#B0A2C9;
+  --m-grateful:#9DBE96; --m-wronged:#D29FAE; --m-tired:#B8A791; --m-lonely:#7086A6; --m-hopeful:#E6BA95;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0; background:var(--bg); background-image:radial-gradient(ellipse at 20% 40%,var(--bg-glow-1) 0%,transparent 55%),radial-gradient(ellipse at 80% 25%,var(--bg-glow-2) 0%,transparent 50%),radial-gradient(ellipse at 45% 75%,var(--bg-glow-3) 0%,transparent 45%),radial-gradient(ellipse at 10% 80%,var(--mist) 0%,transparent 40%);background-attachment:fixed;background-size:cover;color:var(--ink);font-family:var(--font-body);line-height:1.7;-webkit-font-smoothing:antialiased;transition:background var(--transition),color var(--transition);}
+h1,h2,h3,.font-display{font-family:var(--font-display);}
+.font-hand{font-family:var(--font-hand);font-weight:400;}
+a{color:inherit;text-decoration:none;}
+button,input,textarea{font-family:inherit;cursor:pointer;}
+textarea{resize:vertical}
+:focus-visible{outline:2px solid var(--accent-sky);outline-offset:3px;border-radius:4px;}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;}}
+.icon-sprite{position:absolute;width:0;height:0;overflow:hidden;}
+.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+
+.site-header{position:sticky;top:0;z-index:100;height:var(--nav-h);display:flex;align-items:center;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
+.site-header .inner{width:100%;max-width:1180px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:19px;color:var(--ink);letter-spacing:.5px;}
+.logo .icon{width:23px;height:23px;color:var(--accent-sky);}
+.logo .sub{font-family:var(--font-hand);font-size:14px;color:var(--ink-faint);margin-left:2px;font-weight:400;}
+.nav-links{display:flex;align-items:center;gap:6px;}
+.nav-links a{padding:9px 16px;border-radius:999px;font-size:14.5px;color:var(--ink-soft);transition:background var(--transition),color var(--transition);}
+.nav-links a:hover{background:var(--accent-sky-soft);color:var(--ink);}
+.nav-links a.active{background:var(--accent-sky);color:#fff;}
+.header-actions{display:flex;align-items:center;gap:10px;}
+.theme-toggle{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;transition:transform var(--transition),background var(--transition);}
+.theme-toggle:hover{transform:rotate(18deg);}
+.theme-toggle .icon{width:18px;height:18px;color:var(--ink-soft);}
+.theme-toggle .icon-moon{display:none;}html.dark .theme-toggle .icon-sun{display:none;}html.dark .theme-toggle .icon-moon{display:inline-block;}
+
+/* 背景氛围层 */
+.bg-atmosphere{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bg-atmosphere .orb{position:absolute;border-radius:50%;animation:orbFloat 30s ease-in-out infinite}
+.bg-atmosphere .orb:nth-child(1){width:450px;height:450px;top:-120px;left:-80px;background:radial-gradient(circle,var(--bg-glow-1),transparent 70%)}
+.bg-atmosphere .orb:nth-child(2){width:350px;height:350px;bottom:-80px;right:-60px;background:radial-gradient(circle,var(--bg-glow-2),transparent 70%);animation-delay:-10s}
+.bg-atmosphere .orb:nth-child(3){width:250px;height:250px;top:35%;left:55%;background:radial-gradient(circle,var(--bg-glow-3),transparent 70%);animation-delay:-18s}
+.bg-atmosphere .dust{position:absolute;border-radius:50%;animation:dustFloat 20s infinite;opacity:0}
+.bg-atmosphere .dust:nth-child(4){left:20%;top:20%;width:3px;height:3px;animation-duration:25s;animation-delay:0s;background:var(--accent-dawn)}
+.bg-atmosphere .dust:nth-child(5){left:50%;top:60%;width:5px;height:5px;animation-duration:18s;animation-delay:-6s;background:var(--accent-sky)}
+.bg-atmosphere .dust:nth-child(6){left:75%;top:30%;width:4px;height:4px;animation-duration:22s;animation-delay:-12s;background:var(--accent-dawn)}
+.bg-atmosphere .dust:nth-child(7){left:30%;top:75%;width:3px;height:3px;animation-duration:20s;animation-delay:-4s;background:var(--accent-sky)}
+.bg-atmosphere .dust:nth-child(8){left:85%;top:65%;width:4px;height:4px;animation-duration:26s;animation-delay:-9s;background:var(--accent-dawn)}
+.bg-atmosphere .dust:nth-child(9){left:10%;top:50%;width:5px;height:5px;animation-duration:19s;animation-delay:-15s;background:var(--accent-sky)}
+.bg-atmosphere .dust:nth-child(10){left:65%;top:80%;width:3px;height:3px;animation-duration:23s;animation-delay:-3s;background:var(--accent-dawn)}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(35px,-25px)scale(1.06)}66%{transform:translate(-20px,20px)scale(.94)}}
+@keyframes dustFloat{0%{transform:translateY(0)translateX(0)rotate(0);opacity:0}8%{opacity:.4}90%{opacity:.15}100%{transform:translateY(-90vh)translateX(30px)rotate(180deg);opacity:0}}
+
+/* page */
+.wall-wrap{position:relative;z-index:1;max-width:var(--container);margin:0 auto;padding:28px 20px 80px}
+
+.wall-head{text-align:center;margin-bottom:28px}
+.wall-head h1{font-size:28px;margin:0 0 6px;font-weight:600}
+.wall-head p{margin:0;color:var(--ink-faint);font-size:14px}
+
+/* school search */
+.school-section{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-m);padding:18px 20px;margin-bottom:20px;box-shadow:0 6px 20px -12px var(--shadow)}
+.school-section .ss-title{font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.school-section .ss-title .icon{width:15px;height:15px;color:var(--accent-dawn)}
+.school-search{position:relative}
+.school-input{width:100%;padding:10px 14px;border-radius:var(--radius-s);border:1px solid var(--border);background:var(--bg);font-size:14px;color:var(--ink);outline:none;transition:border .25s}
+.school-input:focus{border-color:var(--accent-sky)}
+.dark .school-input{background:rgba(0,0,0,.2)}
+.school-dropdown{position:absolute;top:100%;left:0;right:0;z-index:50;max-height:240px;overflow-y:auto;background:var(--bg-elevated);border:1px solid var(--border);border-radius:0 0 var(--radius-s) var(--radius-s);display:none;box-shadow:0 8px 24px var(--shadow)}
+.school-dropdown.visible{display:block}
+.school-dropdown .sd-item{padding:8px 14px;cursor:pointer;font-size:13px;transition:background .15s;border-bottom:1px solid var(--border);color:var(--ink-soft)}
+.school-dropdown .sd-item:last-child{border-bottom:none}
+.school-dropdown .sd-item:hover{background:var(--accent-sky-soft);color:var(--ink)}
+.school-dropdown .sd-item.hl{background:var(--accent-sky-soft);color:var(--ink);font-weight:500}
+
+.current-school{margin-top:10px;font-size:13px;color:var(--ink-soft);display:none;align-items:center;gap:6px}
+.current-school.show{display:flex}
+.current-school .badge{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:999px;background:var(--accent-sky-soft);color:var(--accent-sky);font-weight:600;font-size:13px}
+.current-school .badge .clear{font-size:16px;cursor:pointer;opacity:.5;margin-left:2px}
+.current-school .badge .clear:hover{opacity:1}
+
+/* compose */
+.compose-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-m);padding:18px 20px;margin-bottom:20px;box-shadow:0 6px 20px -12px var(--shadow)}
+.compose-card .cc-head{font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.compose-card .cc-head .icon{width:15px;height:15px;color:var(--accent-dawn)}
+.compose-card textarea{width:100%;padding:10px 14px;border-radius:var(--radius-s);border:1px solid var(--border);background:var(--bg);font-size:14px;color:var(--ink);outline:none;font-family:var(--font-body);transition:border .25s;min-height:72px;margin-bottom:10px}
+.compose-card textarea:focus{border-color:var(--accent-sky)}
+.compose-card textarea::placeholder{color:var(--ink-faint)}
+.compose-card .cc-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.compose-card .cc-foot .cc-count{font-size:12px;color:var(--ink-faint)}
+.compose-card .cc-foot .cc-count.dim{color:var(--m-upset)}
+.compose-card .cc-foot button{padding:7px 22px;border-radius:999px;border:none;background:var(--accent-sky);color:#fff;font-size:13px;font-weight:500;transition:all .25s}
+.compose-card .cc-foot button:hover{opacity:.88;transform:scale(1.02)}
+.compose-card .cc-foot button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* posts */
+.posts-section .ps-head{font-size:15px;font-weight:600;color:var(--ink-soft);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.posts-section .ps-head .icon{width:16px;height:16px;color:var(--accent-dawn)}
+.posts-section .ps-head .ps-count{font-size:13px;color:var(--ink-faint);font-weight:400}
+.post-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.post-card{position:relative;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-m);padding:16px 18px;box-shadow:0 6px 20px -14px var(--shadow);transition:transform var(--transition),box-shadow var(--transition)}
+.post-card .pc-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.post-card .pc-mood{font-size:16px}
+.post-card .pc-school{font-size:11px;color:var(--accent-sky);padding:1px 8px;border-radius:999px;background:var(--accent-sky-soft);font-weight:500}
+.post-card .pc-text{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.65;word-break:break-word}
+.post-card .pc-foot{margin-top:10px;font-size:12px;color:var(--ink-faint);display:flex;justify-content:space-between;align-items:center}
+.post-card .pc-foot .pc-time{display:flex;align-items:center;gap:4px}
+.post-card .pc-foot .pc-hugs{display:flex;align-items:center;gap:4px;cursor:pointer;transition:color .2s;padding:2px 8px;border-radius:999px;border:1px solid transparent;user-select:none}
+.post-card .pc-foot .pc-hugs:hover{color:var(--accent-dawn);border-color:var(--accent-dawn-soft)}
+.post-card .pc-foot .pc-hugs.liked{color:var(--accent-dawn)}
+.post-card .pc-delete{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:var(--bg-elevated);color:var(--ink-faint);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:12px;padding:0}
+.post-card:hover .pc-delete{opacity:1}
+.post-card .pc-delete:hover{background:var(--m-upset);color:#fff;border-color:var(--m-upset)}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--ink-faint);border:1.5px dashed var(--border);border-radius:var(--radius-m)}
+.empty-state .icon{width:28px;height:28px;margin-bottom:8px;opacity:.5}
+
+.toast{position:fixed;top:80px;right:16px;z-index:200;padding:10px 18px;border-radius:var(--radius-s);background:var(--bg-elevated);border:1px solid var(--border);color:var(--ink);font-size:13px;box-shadow:0 8px 24px var(--shadow);animation:slideIn .3s ease;max-width:300px}
+.toast.success{border-left:4px solid #8FAE8A}
+.toast.error{border-left:4px solid var(--m-upset)}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+
+@media(max-width:640px){
+  .wall-wrap{padding:20px 14px 60px}
+  .wall-head h1{font-size:24px}
+  .school-section,.compose-card{padding:14px 16px}
+  .post-card{padding:14px 16px}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-atmosphere"><span class="orb"></span><span class="orb"></span><span class="orb"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span></div>
+
+<svg class="icon-sprite" aria-hidden="true">
+  <symbol id="i-hole" viewBox="0 0 24 24"><path d="M6.2 4c-2.1 1.1-3.2 3.5-3.2 6.5 0 5.6 4 10.5 9 10.5s9-4.9 9-10.5c0-3-1.1-5.4-3.2-6.5"/><ellipse cx="12" cy="10.6" rx="3.6" ry="4.3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-school" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1M14 9h1M9 13h1M14 13h1M9 17h1M14 17h1"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M14.5 3.5l5 5L8 20H3v-5L14.5 3.5z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 11.5C22 9.8 22 7.4 20.2 5.6 18.4 3.8 15.8 3.5 14 5.1L12 7.1l-2-2C8.2 3.5 5.6 3.8 3.8 5.6 2 7.4 2 9.8 3.2 11.5L12 20l8.8-8.5z"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="inner">
+    <a href="campus-wall.html" class="logo">
+      <svg class="icon"><use href="#i-school"/></svg>
+      校园墙
+      <span class="sub">· 每个学校都有自己的故事</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="emotion-weather-station-global.html">首页广场</a>
+      <a href="campus-wall.html" class="active">校园墙</a>
+      <a href="emotion-weather-station-compose.html">发布心情</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="切换深色模式">
+        <svg class="icon icon-sun"><use href="#i-sun"/></svg>
+        <svg class="icon icon-moon"><use href="#i-moon"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="wall-wrap">
+
+  <div class="wall-head">
+    <h1>🏫 校园墙</h1>
+    <p>搜索你的学校，看看校友们都在说什么</p>
+  </div>
+
+  <div class="school-section">
+    <div class="ss-title"><svg class="icon"><use href="#i-school"/></svg>搜索学校</div>
+    <div class="school-search">
+      <input class="school-input" id="schoolInput" placeholder="输入学校名称，如「北京大学」「浙江大学」…" autocomplete="off">
+      <input type="hidden" id="schoolHidden" value="">
+      <div class="school-dropdown" id="schoolDropdown"></div>
+    </div>
+    <div class="current-school" id="currentSchool">
+      当前查看：<span class="badge" id="schoolBadge"><span id="schoolName"></span><span class="clear" id="clearSchool">&times;</span></span>
+    </div>
+  </div>
+
+  <div class="compose-card" id="composeCard" style="display:none">
+    <div class="cc-head"><svg class="icon"><use href="#i-pen"/></svg>写下你想对校友说的话</div>
+    <textarea id="composeText" placeholder="说说你在学校的故事吧…" maxlength="300"></textarea>
+    <div class="cc-foot">
+      <span class="cc-count" id="charCount">0/300</span>
+      <button id="publishBtn" disabled>发布到校园墙</button>
+    </div>
+  </div>
+
+  <div class="posts-section">
+    <div class="ps-head">
+      <svg class="icon"><use href="#i-hole"/></svg>
+      校园动态
+      <span class="ps-count" id="postCount"></span>
+    </div>
+    <div class="post-grid" id="postGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <svg class="icon"><use href="#i-school"/></svg>
+      <div id="emptyMsg">选择一所学校，查看校友动态</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const root = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('cw-theme');
+if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) root.classList.add('dark');
+themeToggle.addEventListener('click', () => {
+  root.classList.toggle('dark');
+  localStorage.setItem('cw-theme', root.classList.contains('dark') ? 'dark' : 'light');
+});
+
+const MOODS = {happy:'😊',calm:'😌',sad:'😢',upset:'😤',anxious:'😰',grateful:'🙏',wronged:'🥺',tired:'😩',lonely:'💔',hopeful:'🌟'};
+const MOOD_LABELS = {happy:'开心',calm:'平静',sad:'难过',upset:'烦躁',anxious:'迷茫',grateful:'感恩',wronged:'委屈',tired:'疲惫',lonely:'孤独',hopeful:'期待'};
+const NICKNAMES = ['匿名同学','校友甲','校友乙','隔壁班的','同窗','学长','学姐','学弟','学妹','图书馆的猫','食堂阿姨','操场的风','自习室的灯','宿舍的夜','树洞君'];
+
+const SCHOOLS = [
+  '北京大学','清华大学','中国人民大学','北京师范大学','北京航空航天大学','北京理工大学',
+  '北京科技大学','北京交通大学','北京邮电大学','北京化工大学','北京工业大学','北京林业大学',
+  '北京外国语大学','北京语言大学','中国农业大学','中央财经大学','对外经济贸易大学',
+  '中国政法大学','中央民族大学','中国传媒大学','中央音乐学院','中央美术学院',
+  '北京体育大学','华北电力大学','中国石油大学(北京)','中国地质大学(北京)','中国矿业大学(北京)',
+  '北京中医药大学','北京协和医学院','首都医科大学','首都师范大学','首都经济贸易大学',
+  '北京工商大学','北京建筑大学','北京信息科技大学','北京联合大学','北方工业大学',
+  '南开大学','天津大学','天津医科大学','天津工业大学','天津科技大学','天津理工大学',
+  '天津师范大学','天津财经大学','天津外国语大学','天津商业大学','天津中医药大学',
+  '复旦大学','上海交通大学','同济大学','华东师范大学','上海财经大学','上海大学',
+  '华东理工大学','东华大学','上海外国语大学','上海理工大学','上海海事大学',
+  '上海海洋大学','上海师范大学','上海对外经贸大学','上海中医药大学','上海体育学院',
+  '上海音乐学院','上海戏剧学院','上海工程技术大学','上海应用技术大学','上海立信会计金融学院',
+  '上海政法学院','上海商学院','上海电力大学','上海第二工业大学',
+  '重庆大学','西南大学','重庆邮电大学','重庆交通大学','重庆医科大学','重庆师范大学',
+  '重庆工商大学','四川外国语大学','西南政法大学','重庆理工大学','重庆科技学院',
+  '河北大学','河北工业大学','燕山大学','河北师范大学','河北医科大学','河北农业大学',
+  '河北科技大学','石家庄铁道大学','河北经贸大学','河北地质大学','河北工程大学',
+  '山西大学','太原理工大学','中北大学','山西医科大学','山西师范大学','山西财经大学',
+  '山西农业大学','太原科技大学','山西中医药大学','山西大同大学',
+  '内蒙古大学','内蒙古工业大学','内蒙古师范大学','内蒙古农业大学','内蒙古科技大学',
+  '内蒙古民族大学','内蒙古医科大学',
+  '东北大学','大连理工大学','辽宁大学','大连海事大学','东北财经大学','沈阳工业大学',
+  '沈阳航空航天大学','沈阳农业大学','中国医科大学','大连医科大学','辽宁师范大学',
+  '沈阳药科大学','辽宁工程技术大学','大连交通大学','沈阳建筑大学','大连大学',
+  '吉林大学','东北师范大学','长春理工大学','延边大学','吉林农业大学','吉林师范大学',
+  '长春工业大学','吉林财经大学','北华大学','东北电力大学',
+  '哈尔滨工业大学','哈尔滨工程大学','东北林业大学','东北农业大学','黑龙江大学',
+  '哈尔滨医科大学','哈尔滨师范大学','哈尔滨理工大学','齐齐哈尔大学','佳木斯大学',
+  '南京大学','东南大学','苏州大学','南京航空航天大学','南京理工大学','河海大学',
+  '江南大学','中国矿业大学','南京师范大学','南京农业大学','江苏大学','扬州大学',
+  '南京工业大学','南京邮电大学','南京林业大学','南京信息工程大学','南京医科大学',
+  '南京中医药大学','南京财经大学','南京审计大学','江苏科技大学','江苏师范大学',
+  '常州大学','南通大学','苏州科技大学',
+  '浙江大学','浙江工业大学','浙江理工大学','杭州电子科技大学','浙江工商大学',
+  '浙江师范大学','宁波大学','杭州师范大学','温州医科大学','中国美术学院',
+  '浙江中医药大学','浙江财经大学','浙江海洋大学','浙江农林大学','温州大学',
+  '中国科学技术大学','合肥工业大学','安徽大学','安徽师范大学','安徽农业大学',
+  '安徽医科大学','安徽财经大学','安徽工业大学','安徽理工大学','安徽建筑大学',
+  '厦门大学','福州大学','福建师范大学','福建农林大学','华侨大学','集美大学',
+  '闽南师范大学','福建医科大学','福建中医药大学','福建理工大学',
+  '南昌大学','江西师范大学','江西财经大学','江西农业大学','华东交通大学','南昌航空大学',
+  '江西理工大学','东华理工大学','景德镇陶瓷大学','江西中医药大学','赣南师范大学',
+  '山东大学','中国海洋大学','中国石油大学(华东)','青岛大学','山东师范大学',
+  '山东科技大学','山东农业大学','青岛科技大学','济南大学','烟台大学',
+  '曲阜师范大学','山东财经大学','山东建筑大学','齐鲁工业大学','山东中医药大学',
+  '山东第一医科大学','青岛理工大学','聊城大学','临沂大学','鲁东大学',
+  '郑州大学','河南大学','河南师范大学','河南科技大学','河南农业大学','河南理工大学',
+  '河南工业大学','华北水利水电大学','郑州轻工业大学','河南中医药大学','新乡医学院',
+  '信阳师范大学','中原工学院','河南财经政法大学',
+  '武汉大学','华中科技大学','武汉理工大学','华中师范大学','华中农业大学',
+  '中南财经政法大学','中国地质大学(武汉)','湖北大学','武汉科技大学','长江大学',
+  '三峡大学','武汉工程大学','湖北工业大学','武汉纺织大学','湖北中医药大学',
+  '湖北师范大学','湖北经济学院','江汉大学','湖北民族大学',
+  '中南大学','湖南大学','湖南师范大学','湘潭大学','长沙理工大学','湖南农业大学',
+  '中南林业科技大学','南华大学','湖南科技大学','湖南工商大学','湖南中医药大学',
+  '吉首大学','湖南工业大学','衡阳师范学院','湖南理工学院',
+  '中山大学','华南理工大学','暨南大学','华南师范大学','华南农业大学','广东工业大学',
+  '广州大学','深圳大学','南方医科大学','广东外语外贸大学','广州医科大学','广东财经大学',
+  '广州中医药大学','广东药科大学','广东海洋大学','广东技术师范大学','东莞理工学院',
+  '南方科技大学','广州体育学院','广州美术学院','星海音乐学院','广东金融学院',
+  '深圳技术大学','北京师范大学(珠海)',
+  '广西大学','广西师范大学','广西医科大学','桂林电子科技大学','广西民族大学',
+  '桂林理工大学','广西中医药大学','广西科技大学','南宁师范大学',
+  '海南大学','海南师范大学','海南医科大学','热带海洋学院',
+  '四川大学','电子科技大学','西南交通大学','西南财经大学','成都理工大学',
+  '四川农业大学','西南石油大学','成都中医药大学','四川师范大学','西南科技大学',
+  '西华大学','成都信息工程大学','西南医科大学','成都体育学院','四川音乐学院',
+  '贵州大学','贵州师范大学','贵州医科大学','贵州财经大学','贵州民族大学',
+  '贵州中医药大学','遵义医科大学',
+  '云南大学','昆明理工大学','云南师范大学','云南民族大学','云南财经大学',
+  '昆明医科大学','云南农业大学','西南林业大学','云南中医药大学','大理大学',
+  '西藏大学','西藏民族大学','西藏藏医药大学',
+  '西安交通大学','西北工业大学','西安电子科技大学','西北大学','陕西师范大学',
+  '长安大学','西北农林科技大学','西安理工大学','西安建筑科技大学','西安科技大学',
+  '西安外国语大学','西北政法大学','西安邮电大学','西安工业大学','西安石油大学',
+  '陕西科技大学','西安工程大学','延安大学','陕西理工大学',
+  '兰州大学','西北师范大学','兰州理工大学','兰州交通大学','甘肃农业大学',
+  '西北民族大学','甘肃中医药大学','兰州财经大学',
+  '青海大学','青海师范大学','青海民族大学',
+  '宁夏大学','北方民族大学','宁夏医科大学',
+  '新疆大学','石河子大学','新疆师范大学','新疆农业大学','新疆医科大学','新疆财经大学',
+  '国防科技大学','中国科学院大学','中国社会科学院大学',
+  '西交利物浦大学','宁波诺丁汉大学','温州肯恩大学','上海纽约大学','昆山杜克大学',
+  '深圳北理莫斯科大学','广东以色列理工学院',
+];
+
+let currentSchool = '';
+const STORAGE_KEY = 'campuswall_posts';
+
+function loadPosts(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; }
+}
+function savePosts(posts){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(posts)); } catch(e){}
+}
+function genId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function timeAgo(ts){
+  const diff = Date.now() - ts;
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return '刚刚';
+  if (min < 60) return min + ' 分钟前';
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return hr + ' 小时前';
+  const day = Math.floor(hr / 24);
+  if (day < 30) return day + ' 天前';
+  return Math.floor(day / 30) + ' 个月前';
+}
+
+/* school search */
+function setupSchoolSearch(inputId, hiddenId, dropdownId){
+  const input = document.getElementById(inputId);
+  const hidden = document.getElementById(hiddenId);
+  const dd = document.getElementById(dropdownId);
+  if (!input || !hidden || !dd) return;
+
+  function showResults(q){
+    if (!q.trim()){ dd.classList.remove('visible'); return; }
+    const matched = SCHOOLS.filter(s => s.includes(q)).slice(0, 50);
+    if (matched.length === 0){
+      dd.innerHTML = '<div class="sd-item" style="cursor:default;color:var(--ink-faint)">未找到匹配学校</div>';
+      dd.classList.add('visible');
+      return;
+    }
+    dd.innerHTML = matched.map((s, i) => `<div class="sd-item${i === 0 ? ' hl' : ''}" data-val="${s}">${s}</div>`).join('');
+    dd.classList.add('visible');
+    let idx = 0;
+    dd.querySelectorAll('.sd-item').forEach(el => {
+      el.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        selectSchool(el.dataset.val);
+      });
+    });
+    input.addEventListener('keydown', function handler(e){
+      const items = dd.querySelectorAll('.sd-item');
+      if (!dd.classList.contains('visible') || !items.length) return;
+      if (e.key === 'ArrowDown'){ e.preventDefault(); idx = Math.min(idx + 1, items.length - 1); items.forEach((el, i) => el.classList.toggle('hl', i === idx)); }
+      else if (e.key === 'ArrowUp'){ e.preventDefault(); idx = Math.max(idx - 1, 0); items.forEach((el, i) => el.classList.toggle('hl', i === idx)); }
+      else if (e.key === 'Enter'){ e.preventDefault(); if (items[idx]){ items[idx].click(); } input.removeEventListener('keydown', handler); }
+    });
+  }
+
+  input.addEventListener('input', () => showResults(input.value));
+  input.addEventListener('focus', () => { if (input.value.trim()) showResults(input.value); });
+  input.addEventListener('blur', () => setTimeout(() => dd.classList.remove('visible'), 200));
+}
+
+function selectSchool(school){
+  document.getElementById('schoolInput').value = school;
+  document.getElementById('schoolHidden').value = school;
+  document.getElementById('schoolDropdown').classList.remove('visible');
+  currentSchool = school;
+  document.getElementById('currentSchool').classList.add('show');
+  document.getElementById('schoolName').textContent = school;
+  document.getElementById('composeCard').style.display = 'block';
+  renderPosts();
+}
+
+document.getElementById('clearSchool').addEventListener('click', () => {
+  currentSchool = '';
+  document.getElementById('schoolInput').value = '';
+  document.getElementById('schoolHidden').value = '';
+  document.getElementById('currentSchool').classList.remove('show');
+  document.getElementById('composeCard').style.display = 'none';
+  renderPosts();
+});
+
+setupSchoolSearch('schoolInput', 'schoolHidden', 'schoolDropdown');
+
+/* compose */
+const composeText = document.getElementById('composeText');
+const charCount = document.getElementById('charCount');
+const publishBtn = document.getElementById('publishBtn');
+
+composeText.addEventListener('input', () => {
+  const len = composeText.value.length;
+  charCount.textContent = len + '/300';
+  charCount.classList.toggle('dim', len > 250);
+  publishBtn.disabled = len < 5;
+});
+
+publishBtn.addEventListener('click', () => {
+  if (!currentSchool) return;
+  const text = composeText.value.trim();
+  if (text.length < 5) return;
+
+  const moods = Object.keys(MOODS);
+  const mood = moods[Math.floor(Math.random() * moods.length)];
+  const nickname = NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)];
+
+  const posts = loadPosts();
+  posts.unshift({
+    id: genId(),
+    school: currentSchool,
+    mood: mood,
+    text: text,
+    nickname: nickname,
+    timestamp: Date.now(),
+    hugs: 0,
+    liked: false,
+  });
+  savePosts(posts);
+  composeText.value = '';
+  charCount.textContent = '0/300';
+  charCount.classList.remove('dim');
+  publishBtn.disabled = true;
+  renderPosts();
+  showToast('发布成功 ✨', 'success');
+});
+
+/* render */
+function renderPosts(){
+  const grid = document.getElementById('postGrid');
+  const empty = document.getElementById('emptyState');
+  const count = document.getElementById('postCount');
+  const emptyMsg = document.getElementById('emptyMsg');
+
+  let posts = currentSchool ? loadPosts().filter(p => p.school === currentSchool) : [];
+
+  if (!currentSchool){
+    empty.style.display = 'block';
+    emptyMsg.textContent = '选择一所学校，查看校友动态';
+    grid.innerHTML = '';
+    count.textContent = '';
+    return;
+  }
+
+  if (posts.length === 0){
+    empty.style.display = 'block';
+    emptyMsg.textContent = currentSchool + ' 的校园墙还没有动态，写下第一条吧 🌱';
+    grid.innerHTML = '';
+    count.textContent = '0 条动态';
+    return;
+  }
+
+  empty.style.display = 'none';
+  count.textContent = posts.length + ' 条动态';
+  grid.innerHTML = posts.map(p => {
+    const moodEmoji = MOODS[p.mood] || '💬';
+    return `<div class="post-card" data-id="${p.id}">
+      <div class="pc-head">
+        <span class="pc-mood">${moodEmoji}</span>
+        <span class="pc-school">${p.school}</span>
+      </div>
+      <p class="pc-text">${escapeHtml(p.text)}</p>
+      <div class="pc-foot">
+        <span class="pc-time">${p.nickname} · ${timeAgo(p.timestamp)}</span>
+        <span class="pc-hugs${p.liked ? ' liked' : ''}" data-id="${p.id}">${p.liked ? '❤️' : '♡'} ${p.hugs}</span>
+      </div>
+      <button class="pc-delete" data-id="${p.id}" title="删除">×</button>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.pc-hugs').forEach(el => {
+    el.addEventListener('click', function(){
+      const id = this.dataset.id;
+      const posts = loadPosts();
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+      if (post.liked){
+        post.hugs = Math.max(0, post.hugs - 1);
+        post.liked = false;
+      } else {
+        post.hugs += 1;
+        post.liked = true;
+      }
+      savePosts(posts);
+      renderPosts();
+    });
+  });
+
+  grid.querySelectorAll('.pc-delete').forEach(el => {
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      const id = this.dataset.id;
+      let posts = loadPosts();
+      posts = posts.filter(p => p.id !== id);
+      savePosts(posts);
+      renderPosts();
+      showToast('已删除', 'success');
+    });
+  });
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function showToast(msg, type){
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || '');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 300); }, 2500);
+}
+</script>
+
+</body>
+</html>
