@@ -1,0 +1,382 @@
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.use((req, res, next) => {
+  res.setHeader('ngrok-skip-browser-warning', '1');
+  next();
+});
+
+const DATA_FILE = path.join(__dirname, 'data.json');
+
+function readData() {
+  try {
+    if (!fs.existsSync(DATA_FILE)) return { posts: [] };
+    return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  } catch (e) {
+    return { posts: [] };
+  }
+}
+
+function writeData(data) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+const BLOCKED_WORDS_FILE = path.join(__dirname, 'blocked-words.json');
+
+function loadBlockedWords() {
+  try {
+    if (!fs.existsSync(BLOCKED_WORDS_FILE)) return { words: [], hint: '' };
+    return JSON.parse(fs.readFileSync(BLOCKED_WORDS_FILE, 'utf-8'));
+  } catch (e) {
+    return { words: [], hint: '' };
+  }
+}
+
+function checkBlockedWords(text) {
+  const { words, hint } = loadBlockedWords();
+  for (const word of words) {
+    if (word && text.includes(word)) {
+      return { blocked: true, word, hint: hint || '内容包含不合适的词语，请修改后重试' };
+    }
+  }
+  return { blocked: false };
+}
+
+const WALL_CATEGORIES = {
+  confession: { label: '表白', icon: '💕', color: '#E8787A' },
+  rant: { label: '吐槽', icon: '💢', color: '#E8A84B' },
+  help: { label: '求助', icon: '📢', color: '#6BA3D9' },
+  share: { label: '分享', icon: '✨', color: '#7FBF7F' },
+  lostfound: { label: '寻物', icon: '🔍', color: '#B899D4' },
+  ask: { label: '打听', icon: '❓', color: '#E8A07A' },
+  greeting: { label: '祝福', icon: '🎉', color: '#E8C84B' }
+};
+
+function initSeedData() {
+  if (fs.existsSync(DATA_FILE)) return;
+  const now = Date.now();
+  const hour = 3600000;
+  const seedPosts = [
+    {
+      id: 'seed_1', mood: 'happy', text: '今天阳台的多肉开花了，一件很小的事，却让我开心了一整天。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 34, type: 'mood',
+      createdAt: new Date(now - 2 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '这种小确幸真的会让人一整天都有力气～', nick: '安静的风', mood: 'calm', createdAt: new Date(now - 1 * hour).toISOString() },
+        { id: generateId(), text: '多肉开花超级难得，恭喜你！', nick: '纸飞机', mood: 'happy', createdAt: new Date(now - 0.67 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_2', mood: 'calm', text: '没什么大事发生，只是想找个地方，安静地写下今天的心情。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 21, type: 'mood',
+      createdAt: new Date(now - 4 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '平静也是一种很好的状态啦', nick: '路过的云', mood: 'calm', createdAt: new Date(now - 3 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_3', mood: 'sad', text: '好像什么都没做好，又是emo的一天，希望明天会好一点。',
+      bg: 'paper', duration: '24h', authorId: 'seed', hugCount: 58, type: 'mood',
+      createdAt: new Date(now - 6 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '辛苦了，今天先好好休息吧', nick: '抱枕小熊', mood: 'calm', createdAt: new Date(now - 5 * hour).toISOString() },
+        { id: generateId(), text: '抱抱你，明天一定会不一样的', nick: '漂流瓶', mood: 'sad', createdAt: new Date(now - 2 * hour).toISOString() },
+        { id: generateId(), text: '我也是，我们一起加油', nick: '数星星的人', mood: 'hopeful', createdAt: new Date(now - 1 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_4', mood: 'anxious', text: '最近总是有点心不在焉，不知道自己到底在焦虑什么。',
+      bg: 'paper', duration: '24h', authorId: 'seed', hugCount: 19, type: 'mood',
+      createdAt: new Date(now - 8 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '有时候不知道原因也没关系，先照顾好自己', nick: '小雨伞', mood: 'calm', createdAt: new Date(now - 6 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_5', mood: 'upset', text: '今天真的很烦躁，什么事都不顺，需要一个安静的角落。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 27, type: 'mood',
+      createdAt: new Date(now - 10 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '深呼吸，一切都会过去的', nick: '躲雨的猫', mood: 'calm', createdAt: new Date(now - 9 * hour).toISOString() },
+        { id: generateId(), text: '这里就是安静的角落，多待一会儿吧', nick: '深夜电台', mood: 'calm', createdAt: new Date(now - 7 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_6', mood: 'happy', text: '坚持记录心情满一个月啦，谢谢一直在看我碎碎念的你们。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 63, type: 'mood',
+      createdAt: new Date(now - 12 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '一个月啦，太棒了！继续加油～', nick: '慢半拍先生', mood: 'happy', createdAt: new Date(now - 11 * hour).toISOString() },
+        { id: generateId(), text: '见证了你的坚持，很感动', nick: '晒太阳的鱼', mood: 'grateful', createdAt: new Date(now - 8 * hour).toISOString() },
+        { id: generateId(), text: '下一个月也要一起记录呀', nick: '路过的云', mood: 'hopeful', createdAt: new Date(now - 5 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_7', mood: 'grateful', text: '谢谢今天陌生人递给我的那把伞，小小的善意会被记很久。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 41, type: 'mood',
+      createdAt: new Date(now - 14 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '这种小小的善意真的很治愈', nick: '漂流瓶', mood: 'grateful', createdAt: new Date(now - 12 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_8', mood: 'lonely', text: '一个人吃饭一个人走路，今天格外觉得安静得有点空。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 23, type: 'mood',
+      createdAt: new Date(now - 16 * hour).toISOString(),
+      comments: []
+    },
+    {
+      id: 'seed_9', mood: 'hopeful', text: '投了很久的简历终于有回音了，希望这次能顺利一点。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 30, type: 'mood',
+      createdAt: new Date(now - 18 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '加油，相信会有好结果的', nick: '纸飞机', mood: 'hopeful', createdAt: new Date(now - 16 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_10', mood: 'tired', text: '连续加班一周了，只想好好睡一觉，什么都不想干。',
+      bg: 'paper', duration: '24h', authorId: 'seed', hugCount: 37, type: 'mood',
+      createdAt: new Date(now - 20 * hour).toISOString(),
+      comments: [
+        { id: generateId(), text: '辛苦了，早点休息吧', nick: '安静的风', mood: 'calm', createdAt: new Date(now - 18 * hour).toISOString() },
+        { id: generateId(), text: '工作再忙也要照顾好自己呀', nick: '抱枕小熊', mood: 'calm', createdAt: new Date(now - 15 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'seed_11', mood: 'wronged', text: '明明不是我的错，却要我来道歉，心里有点委屈。',
+      bg: 'paper', duration: 'permanent', authorId: 'seed', hugCount: 25, type: 'mood',
+      createdAt: new Date(now - 22 * hour).toISOString(),
+      comments: []
+    },
+    {
+      id: 'wall_seed_1', type: 'wall', category: 'confession', text: '图书馆靠窗第三排的那个女生，你低头看书的样子真的很美。不敢当面说，就在这里悄悄告诉你。', nickname: '匿名学长', authorId: 'seed', hugCount: 42, createdAt: new Date(now - 3 * hour).toISOString(), comments: [
+        { id: generateId(), text: '好甜啊！希望那个女生能看到', nick: '吃瓜群众', mood: 'happy', createdAt: new Date(now - 2 * hour).toISOString() },
+        { id: generateId(), text: '鼓起勇气去认识她吧！', nick: '热心网友', mood: 'hopeful', createdAt: new Date(now - 1 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'wall_seed_2', type: 'wall', category: 'rant', text: '食堂二楼的麻辣香锅今天也太咸了吧！跟打盐的一样，差评！', nickname: '吃货一枚', authorId: 'seed', hugCount: 18, createdAt: new Date(now - 5 * hour).toISOString(), comments: [
+        { id: generateId(), text: '哈哈哈哈确实，我上次也被咸到了', nick: '干饭人', mood: 'upset', createdAt: new Date(now - 4 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'wall_seed_3', type: 'wall', category: 'help', text: '请问一下选课系统里的通识课哪个比较好过？求学长学姐推荐！', nickname: '大一新生', authorId: 'seed', hugCount: 12, createdAt: new Date(now - 6 * hour).toISOString(), comments: [
+        { id: generateId(), text: '中国传统文化概论，不点名不考试', nick: '老学长', mood: 'calm', createdAt: new Date(now - 5 * hour).toISOString() },
+        { id: generateId(), text: '电影赏析也不错，每周看个电影写个感想', nick: '电影迷', mood: 'happy', createdAt: new Date(now - 4 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'wall_seed_4', type: 'wall', category: 'share', text: '学校北门新开了一家咖啡店，环境超好而且有猫！适合自习和发呆～', nickname: '探店达人', authorId: 'seed', hugCount: 35, createdAt: new Date(now - 7 * hour).toISOString(), comments: []
+    },
+    {
+      id: 'wall_seed_5', type: 'wall', category: 'lostfound', text: '昨天在体育馆丢失一个黑色水杯，杯盖上有一个小猫贴纸。捡到的同学请联系我，谢谢！', nickname: '粗心鬼', authorId: 'seed', hugCount: 8, createdAt: new Date(now - 8 * hour).toISOString(), comments: [
+        { id: generateId(), text: '帮顶！希望你尽快找到', nick: '好心人', mood: 'calm', createdAt: new Date(now - 7 * hour).toISOString() }
+      ]
+    },
+    {
+      id: 'wall_seed_6', type: 'wall', category: 'greeting', text: '马上期末考试了，祝大家都能过过过！加油！', nickname: '锦鲤附体', authorId: 'seed', hugCount: 67, createdAt: new Date(now - 10 * hour).toISOString(), comments: [
+        { id: generateId(), text: '借你吉言！一起加油！', nick: '复习中', mood: 'hopeful', createdAt: new Date(now - 9 * hour).toISOString() },
+        { id: generateId(), text: '谢谢！祝你也考好！', nick: '熬夜选手', mood: 'tired', createdAt: new Date(now - 8 * hour).toISOString() }
+      ]
+    }
+  ];
+  writeData({ posts: seedPosts });
+  console.log('已初始化种子数据（11 条心情 + 6 条校园墙）');
+}
+
+initSeedData();
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'emotion-weather-station-global.html'));
+});
+
+app.get('/compose', (req, res) => {
+  res.sendFile(path.join(__dirname, 'emotion-weather-station-compose.html'));
+});
+
+app.get('/detail', (req, res) => {
+  res.sendFile(path.join(__dirname, 'emotion-weather-station-detail.html'));
+});
+
+app.get('/wall', (req, res) => {
+  res.sendFile(path.join(__dirname, 'campus-wall.html'));
+});
+
+app.get('/wall/compose', (req, res) => {
+  res.sendFile(path.join(__dirname, 'campus-wall-compose.html'));
+});
+
+app.get('/wall/detail', (req, res) => {
+  res.sendFile(path.join(__dirname, 'campus-wall-detail.html'));
+});
+
+app.get('/api/posts', (req, res) => {
+  const data = readData();
+  const { mood, q, type, category } = req.query;
+  let posts = data.posts || [];
+  if (type) {
+    posts = posts.filter(p => (p.type || 'mood') === type);
+  }
+  if (category) {
+    posts = posts.filter(p => p.category === category);
+  }
+  if (mood) {
+    posts = posts.filter(p => p.mood === mood);
+  }
+  if (q && q.trim()) {
+    const keyword = q.trim().toLowerCase();
+    posts = posts.filter(p => {
+      if (p.text.toLowerCase().includes(keyword)) return true;
+      if (p.nickname && p.nickname.toLowerCase().includes(keyword)) return true;
+      if (p.comments && p.comments.some(c => c.text.toLowerCase().includes(keyword))) return true;
+      return false;
+    });
+  }
+  posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  res.json(posts);
+});
+
+app.get('/api/posts/:id', (req, res) => {
+  const data = readData();
+  const post = (data.posts || []).find(p => p.id === req.params.id);
+  if (!post) return res.status(404).json({ error: '帖子不存在' });
+  res.json(post);
+});
+
+app.post('/api/posts', (req, res) => {
+  const { type, mood, text, bg, duration, authorId, category, nickname } = req.body;
+  const postType = type || 'mood';
+  if (postType === 'wall') {
+    if (!category || !text) {
+      return res.status(400).json({ error: '分类和内容不能为空' });
+    }
+  } else {
+    if (!mood || !text) {
+      return res.status(400).json({ error: '心情和内容不能为空' });
+    }
+  }
+  const blockResult = checkBlockedWords(text);
+  if (blockResult.blocked) {
+    return res.status(400).json({ error: blockResult.hint });
+  }
+  const data = readData();
+  const now = Date.now();
+  const post = {
+    id: generateId(),
+    type: postType,
+    category: category || null,
+    nickname: nickname || null,
+    mood: mood || null,
+    text,
+    bg: bg || 'paper',
+    duration: duration || '24h',
+    authorId: authorId || 'anonymous',
+    hugCount: 0,
+    createdAt: new Date(now).toISOString(),
+    expireAt: postType === 'wall' ? null : getExpireTime(duration || '24h', now),
+    comments: []
+  };
+  data.posts = data.posts || [];
+  data.posts.push(post);
+  writeData(data);
+  res.status(201).json(post);
+});
+
+app.delete('/api/posts/:id', (req, res) => {
+  const data = readData();
+  const index = (data.posts || []).findIndex(p => p.id === req.params.id);
+  if (index === -1) return res.status(404).json({ error: '帖子不存在' });
+  data.posts.splice(index, 1);
+  writeData(data);
+  res.json({ success: true });
+});
+
+app.get('/api/posts/:id/comments', (req, res) => {
+  const data = readData();
+  const post = (data.posts || []).find(p => p.id === req.params.id);
+  if (!post) return res.status(404).json({ error: '帖子不存在' });
+  res.json(post.comments || []);
+});
+
+app.post('/api/posts/:id/comments', (req, res) => {
+  const { text, nick, mood } = req.body;
+  if (!text) return res.status(400).json({ error: '评论内容不能为空' });
+  const blockResult = checkBlockedWords(text);
+  if (blockResult.blocked) {
+    return res.status(400).json({ error: blockResult.hint });
+  }
+  const data = readData();
+  const post = (data.posts || []).find(p => p.id === req.params.id);
+  if (!post) return res.status(404).json({ error: '帖子不存在' });
+  const comment = {
+    id: generateId(),
+    text,
+    nick: nick || '匿名',
+    mood: mood || 'calm',
+    createdAt: new Date().toISOString()
+  };
+  post.comments = post.comments || [];
+  post.comments.push(comment);
+  writeData(data);
+  res.status(201).json(comment);
+});
+
+app.post('/api/posts/:id/hug', (req, res) => {
+  const data = readData();
+  const post = (data.posts || []).find(p => p.id === req.params.id);
+  if (!post) return res.status(404).json({ error: '帖子不存在' });
+  const { action } = req.body || {};
+  if (action === 'unhug') {
+    post.hugCount = Math.max(0, (post.hugCount || 0) - 1);
+  } else {
+    post.hugCount = (post.hugCount || 0) + 1;
+  }
+  writeData(data);
+  res.json({ hugCount: post.hugCount });
+});
+
+function getExpireTime(duration, now) {
+  const map = { '1h': 3600000, '6h': 21600000, '24h': 86400000, '7d': 604800000 };
+  return new Date((now || Date.now()) + (map[duration] || 86400000)).toISOString();
+}
+
+function getLocalIP() {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  const localIP = getLocalIP();
+  console.log('');
+  console.log('🌳 树洞服务器已启动');
+  console.log('──────────────────────────────────────────');
+  console.log('  本机访问: http://localhost:' + PORT);
+  if (localIP !== 'localhost') {
+    console.log('  局域网访问: http://' + localIP + ':' + PORT);
+  }
+  console.log('──────────────────────────────────────────');
+  console.log('  广场: http://' + localIP + ':' + PORT + '/');
+  console.log('  写心情: http://' + localIP + ':' + PORT + '/compose');
+  console.log('  详情: http://' + localIP + ':' + PORT + '/detail?id=xxx');
+  console.log('  校园墙: http://' + localIP + ':' + PORT + '/wall');
+  console.log('  校园墙发布: http://' + localIP + ':' + PORT + '/wall/compose');
+  console.log('');
+});

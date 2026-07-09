@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>发布留言 · 校园墙 · 树洞</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F7F4EE; --bg-elevated:#FFFFFF;
+  --ink:#2B2A28; --ink-soft:#6B6660; --ink-faint:#9C968C;
+  --border:rgba(43,42,40,.10); --shadow:rgba(43,42,40,.07);
+  --accent-sky:#7B93AE; --accent-sky-soft:#DCE4EC;
+  --accent-dawn:#E3A587; --accent-dawn-soft:#F6E4D8;
+  --wall-accent:#D4886E; --wall-accent-soft:#F6E4D8;
+  --font-display:"Noto Serif SC", serif; --font-body:"Noto Sans SC", sans-serif; --font-hand:"Ma Shan Zheng", cursive;
+  --radius-s:10px; --radius-m:16px; --radius-l:28px;
+  --nav-h:64px; --container:820px; --transition:.28s cubic-bezier(.4,0,.2,1);
+}
+html.dark{
+  --bg:#14161D; --bg-elevated:#1C1F27;
+  --ink:#EAE6DD; --ink-soft:#A79F92; --ink-faint:#726B60;
+  --border:rgba(234,230,221,.08); --shadow:rgba(0,0,0,.35);
+  --accent-sky:#8FA8C2; --accent-sky-soft:#26303C;
+  --accent-dawn:#E8B79A; --accent-dawn-soft:#3A2C24;
+  --wall-accent:#E8B79A; --wall-accent-soft:#3A2C24;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body); line-height:1.7; transition:background var(--transition), color var(--transition); -webkit-font-smoothing:antialiased;}
+h1,h2,.font-display{font-family:var(--font-display);}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+:focus-visible{outline:2px solid var(--accent-sky); outline-offset:3px; border-radius:4px;}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s !important; transition-duration:.001s !important;}}
+.icon-sprite{position:absolute; width:0; height:0; overflow:hidden;}
+.icon{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0;}
+
+.site-header{position:sticky; top:0; z-index:100; height:var(--nav-h); display:flex; align-items:center; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--border);}
+.site-header .inner{width:100%; max-width:1180px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between;}
+.logo{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:19px;}
+.logo .icon{width:23px; height:23px; color:var(--accent-sky);}
+.logo .sub{font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); font-weight:400;}
+.nav-links{display:flex; gap:6px;}
+.nav-links a{padding:9px 16px; border-radius:999px; font-size:14.5px; color:var(--ink-soft); transition:background var(--transition), color var(--transition);}
+.nav-links a:hover{background:var(--accent-sky-soft); color:var(--ink);}
+.nav-links a.active{background:var(--accent-sky); color:#fff;}
+.theme-toggle{width:38px; height:38px; border-radius:50%; border:1px solid var(--border); background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; transition:transform var(--transition);}
+.theme-toggle:hover{transform:rotate(18deg);}
+.theme-toggle .icon{width:18px; height:18px; color:var(--ink-soft);}
+.theme-toggle .icon-moon{display:none;} html.dark .theme-toggle .icon-sun{display:none;} html.dark .theme-toggle .icon-moon{display:inline-block;}
+@media (max-width:640px){ .nav-links{display:none;} }
+
+.compose-wrap{max-width:var(--container); margin:0 auto; padding:40px 20px 80px;}
+.compose-head{text-align:center; margin-bottom:32px;}
+.compose-head h1{font-size:26px; margin:0 0 8px; font-weight:600;}
+.compose-head p{font-family:var(--font-hand); font-size:17px; color:var(--ink-faint); margin:0;}
+
+.compose-card{
+  background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-l);
+  padding:28px; box-shadow:0 16px 40px -24px var(--shadow);
+}
+
+.field-label{display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:var(--ink-soft); margin-bottom:12px;}
+.field-label .icon{width:15px; height:15px; color:var(--wall-accent);}
+.field-block{margin-bottom:28px;}
+.field-block:last-child{margin-bottom:0;}
+
+.cate-picker{display:flex; gap:10px; flex-wrap:wrap;}
+.cate-btn{
+  flex:1; min-width:88px; display:flex; flex-direction:column; align-items:center; gap:9px;
+  padding:16px 8px; border-radius:var(--radius-m); border:1.5px solid var(--border);
+  background:var(--bg); color:var(--ink-soft);
+  transition:all var(--transition);
+}
+.cate-btn .cate-icon{font-size:22px;}
+.cate-btn span.label{font-size:12.5px;}
+.cate-btn:hover{transform:translateY(-2px); border-color:var(--mist);}
+.cate-btn.selected{background:var(--wall-accent-soft); border-color:var(--wall-accent); color:var(--ink); font-weight:500;}
+
+.nick-input-wrap{display:flex; align-items:center; gap:12px;}
+.nick-input-wrap input{
+  flex:1; max-width:240px; padding:10px 14px; border-radius:var(--radius-s); border:1.5px solid var(--border);
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:14px;
+  transition:border-color var(--transition);
+}
+.nick-input-wrap input::placeholder{color:var(--ink-faint);}
+.nick-input-wrap input:focus{outline:none; border-color:var(--accent-sky);}
+.nick-hint{font-size:12px; color:var(--ink-faint);}
+.nick-random{font-size:12px; color:var(--accent-sky); cursor:pointer; text-decoration:underline;}
+
+.textarea-wrap{position:relative;}
+textarea#wallText{
+  width:100%; min-height:140px; resize:vertical;
+  padding:16px; border-radius:var(--radius-m); border:1.5px solid var(--border);
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:15px; line-height:1.75;
+  transition:border-color var(--transition), background var(--transition);
+}
+textarea#wallText::placeholder{color:var(--ink-faint); font-family:var(--font-hand); font-size:15.5px;}
+textarea#wallText:focus{outline:none; border-color:var(--accent-sky); background:var(--bg-elevated);}
+textarea#wallText.invalid{border-color:var(--wall-accent);}
+.char-count{position:absolute; right:14px; bottom:10px; font-size:11.5px; color:var(--ink-faint);}
+.char-count.warn{color:var(--wall-accent);}
+.field-error{font-size:12.5px; color:var(--wall-accent); margin-top:8px; display:none; align-items:center; gap:5px;}
+.field-error.show{display:flex;}
+
+.submit-row{display:flex; align-items:center; justify-content:space-between; margin-top:32px; gap:16px;}
+.anon-note{font-size:12px; color:var(--ink-faint); display:flex; align-items:center; gap:5px;}
+.anon-note .icon{width:14px; height:14px;}
+.submit-btn{
+  padding:13px 32px; border-radius:999px; border:none;
+  background:var(--wall-accent); color:#fff; font-size:15px; font-weight:500;
+  display:flex; align-items:center; gap:8px;
+  transition:background var(--transition), transform var(--transition), opacity var(--transition);
+}
+.submit-btn:hover:not(:disabled){background:color-mix(in srgb, var(--wall-accent) 85%, #000);}
+.submit-btn:active:not(:disabled){transform:scale(.97);}
+.submit-btn:disabled{opacity:.45; cursor:not-allowed;}
+.submit-btn .icon{width:16px; height:16px;}
+.submit-btn .spinner{width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none;}
+.submit-btn.loading .spinner{display:inline-block;}
+.submit-btn.loading .btn-icon, .submit-btn.loading .btn-text{opacity:.6;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(20,18,15,.45); backdrop-filter:blur(3px);
+  display:flex; align-items:center; justify-content:center; z-index:200;
+  opacity:0; pointer-events:none; transition:opacity var(--transition);
+}
+.modal-overlay.show{opacity:1; pointer-events:auto;}
+.modal-card{
+  background:var(--bg-elevated); border-radius:var(--radius-l); padding:36px 32px;
+  max-width:340px; text-align:center; transform:translateY(14px) scale(.96); opacity:0;
+  transition:transform var(--transition), opacity var(--transition); box-shadow:0 24px 60px -20px rgba(0,0,0,.3);
+}
+.modal-overlay.show .modal-card{transform:translateY(0) scale(1); opacity:1;}
+.modal-icon{font-size:48px; margin-bottom:12px;}
+.modal-card h3{margin:0 0 8px; font-size:18px; font-family:var(--font-display);}
+.modal-card p{margin:0 0 24px; font-size:13.5px; color:var(--ink-soft);}
+.modal-actions{display:flex; gap:10px;}
+.modal-btn{flex:1; padding:10px; border-radius:999px; font-size:13.5px; border:1px solid var(--border); background:var(--bg); color:var(--ink-soft);}
+.modal-btn.primary{background:var(--wall-accent); color:#fff; border:none;}
+
+.site-footer{border-top:1px solid var(--border); padding:32px 24px; text-align:center; color:var(--ink-faint); font-size:12px;}
+
+@media (max-width:520px){
+  .cate-btn{min-width:70px; padding:13px 6px;}
+  .submit-row{flex-direction:column-reverse; align-items:stretch;}
+  .submit-btn{justify-content:center;}
+  .nick-input-wrap{flex-direction:column; align-items:flex-start;}
+  .nick-input-wrap input{max-width:100%;}
+}
+</style>
+</head>
+<body>
+
+<svg class="icon-sprite" aria-hidden="true">
+  <symbol id="i-hole" viewBox="0 0 24 24"><path d="M6.2 4c-2.1 1.1-3.2 3.5-3.2 6.5 0 5.6 4 10.5 9 10.5s9-4.9 9-10.5c0-3-1.1-5.4-3.2-6.5"/><ellipse cx="12" cy="10.6" rx="3.6" ry="4.3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-3-6-7-2Z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="inner">
+    <a href="/wall" class="logo">
+      <svg class="icon"><use href="#i-hole"/></svg>
+      树洞
+      <span class="sub">· 校园墙</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/wall">校园墙</a>
+      <a href="/wall/compose" class="active">发布留言</a>
+      <a href="/">树洞广场</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换深色模式">
+      <svg class="icon icon-sun"><use href="#i-sun"/></svg>
+      <svg class="icon icon-moon"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="compose-wrap">
+  <div class="compose-head">
+    <h1>在校园墙上留言</h1>
+    <p>匿名发布，全校可见</p>
+  </div>
+
+  <form class="compose-card" id="composeForm" novalidate>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>选择分类</div>
+      <div class="cate-picker" id="catePicker">
+        <button type="button" class="cate-btn" data-category="confession"><span class="cate-icon">💕</span><span class="label">表白</span></button>
+        <button type="button" class="cate-btn" data-category="rant"><span class="cate-icon">💢</span><span class="label">吐槽</span></button>
+        <button type="button" class="cate-btn" data-category="help"><span class="cate-icon">📢</span><span class="label">求助</span></button>
+        <button type="button" class="cate-btn" data-category="share"><span class="cate-icon">✨</span><span class="label">分享</span></button>
+        <button type="button" class="cate-btn" data-category="lostfound"><span class="cate-icon">🔍</span><span class="label">寻物</span></button>
+        <button type="button" class="cate-btn" data-category="ask"><span class="cate-icon">❓</span><span class="label">打听</span></button>
+        <button type="button" class="cate-btn" data-category="greeting"><span class="cate-icon">🎉</span><span class="label">祝福</span></button>
+      </div>
+      <div class="field-error" id="cateError"><svg class="icon"><use href="#i-alert"/></svg>请选择一个分类</div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>你的昵称（选填）</div>
+      <div class="nick-input-wrap">
+        <input type="text" id="nickInput" placeholder="匿名同学" maxlength="20">
+        <span class="nick-random" id="randomNickBtn">换一个</span>
+      </div>
+      <span class="nick-hint">不填则使用随机昵称</span>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>写下你想说的话</div>
+      <div class="textarea-wrap">
+        <textarea id="wallText" maxlength="500" placeholder="表白、吐槽、求助、分享……说说你的想法吧"></textarea>
+        <span class="char-count" id="charCount">0 / 500</span>
+      </div>
+      <div class="field-error" id="textError"><svg class="icon"><use href="#i-alert"/></svg>请至少写下 5 个字</div>
+    </div>
+
+    <div class="submit-row">
+      <span class="anon-note"><svg class="icon"><use href="#i-lock"/></svg>匿名发布，无人知道是你</span>
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="spinner"></span>
+        <svg class="icon btn-icon"><use href="#i-send"/></svg>
+        <span class="btn-text">贴到墙上</span>
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<footer class="site-footer">© 2026 树洞 · 校园墙 · 每一句话都值得被听见</footer>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <div class="modal-icon">📌</div>
+    <h3>留言已贴到墙上</h3>
+    <p>你的话已经在校园墙上公开了。</p>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn" id="modalWrite">再写一条</button>
+      <button type="button" class="modal-btn primary" id="modalGo">去看校园墙</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const root = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ews-theme');
+if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) root.classList.add('dark');
+themeToggle.addEventListener('click', () => {
+  root.classList.toggle('dark');
+  localStorage.setItem('ews-theme', root.classList.contains('dark') ? 'dark' : 'light');
+});
+
+function getAuthorId() {
+  let id = localStorage.getItem('treehole_author_id');
+  if (!id) { id = 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); localStorage.setItem('treehole_author_id', id); }
+  return id;
+}
+const myAuthorId = getAuthorId();
+
+const RANDOM_NICKS = ['匿名同学','隔壁小王','操场上的风','图书馆的猫','食堂干饭人','自习室幽灵','校园小喇叭','奶茶续命中','早八睡不醒','晚课摸鱼中','期末加油鸭','今天也很努力'];
+
+let selectedCategory = null;
+const cateBtns = document.querySelectorAll('.cate-btn');
+const cateError = document.getElementById('cateError');
+cateBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    cateBtns.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedCategory = btn.dataset.category;
+    cateError.classList.remove('show');
+  });
+});
+
+const nickInput = document.getElementById('nickInput');
+const randomNickBtn = document.getElementById('randomNickBtn');
+function setRandomNick(){
+  nickInput.value = RANDOM_NICKS[Math.floor(Math.random() * RANDOM_NICKS.length)];
+}
+randomNickBtn.addEventListener('click', setRandomNick);
+
+const textarea = document.getElementById('wallText');
+const charCount = document.getElementById('charCount');
+const textError = document.getElementById('textError');
+const MIN_LEN = 5, MAX_LEN = 500;
+textarea.addEventListener('input', () => {
+  const len = textarea.value.length;
+  charCount.textContent = len + ' / ' + MAX_LEN;
+  charCount.classList.toggle('warn', len > MAX_LEN - 30);
+  if (len > 0) { textarea.classList.remove('invalid'); textError.classList.remove('show'); }
+});
+
+async function submitPost(payload){
+  const res = await fetch('/api/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type: 'wall',
+      category: payload.category,
+      text: payload.content,
+      nickname: payload.nickname || null,
+      authorId: myAuthorId
+    })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || '发布失败');
+  return data;
+}
+
+const form = document.getElementById('composeForm');
+const submitBtn = document.getElementById('submitBtn');
+const successModal = document.getElementById('successModal');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  let valid = true;
+
+  if (!selectedCategory) { cateError.classList.add('show'); valid = false; }
+  const textLen = textarea.value.trim().length;
+  if (textLen < MIN_LEN) {
+    textarea.classList.add('invalid');
+    textError.classList.add('show');
+    valid = false;
+  }
+  if (!valid) return;
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+
+  try {
+    await submitPost({
+      category: selectedCategory,
+      content: textarea.value.trim(),
+      nickname: nickInput.value.trim() || null
+    });
+  } catch(e){
+    submitBtn.classList.remove('loading');
+    submitBtn.disabled = false;
+    alert(e.message || '发布失败，请稍后再试');
+    return;
+  }
+
+  submitBtn.classList.remove('loading');
+  submitBtn.disabled = false;
+
+  successModal.classList.add('show');
+});
+
+document.getElementById('modalWrite').addEventListener('click', () => {
+  successModal.classList.remove('show');
+  form.reset();
+  cateBtns.forEach(b => b.classList.remove('selected'));
+  selectedCategory = null;
+  charCount.textContent = '0 / ' + MAX_LEN;
+  textarea.classList.remove('invalid');
+});
+document.getElementById('modalGo').addEventListener('click', () => {
+  window.location.href = '/wall';
+});
+</script>
+
+</body>
+</html>

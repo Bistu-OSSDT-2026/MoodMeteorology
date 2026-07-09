@@ -1,0 +1,399 @@
+{
+  "posts": [
+    {
+      "id": "seed_1",
+      "mood": "happy",
+      "text": "今天阳台的多肉开花了，一件很小的事，却让我开心了一整天。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 34,
+      "type": "mood",
+      "createdAt": "2026-07-09T06:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiouga2log",
+          "text": "这种小确幸真的会让人一整天都有力气～",
+          "nick": "安静的风",
+          "mood": "calm",
+          "createdAt": "2026-07-09T07:17:27.773Z"
+        },
+        {
+          "id": "mrd8hioulrcy3h",
+          "text": "多肉开花超级难得，恭喜你！",
+          "nick": "纸飞机",
+          "mood": "happy",
+          "createdAt": "2026-07-09T07:37:15.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_2",
+      "mood": "calm",
+      "text": "没什么大事发生，只是想找个地方，安静地写下今天的心情。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 21,
+      "type": "mood",
+      "createdAt": "2026-07-09T04:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiou42844t",
+          "text": "平静也是一种很好的状态啦",
+          "nick": "路过的云",
+          "mood": "calm",
+          "createdAt": "2026-07-09T05:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_3",
+      "mood": "sad",
+      "text": "好像什么都没做好，又是emo的一天，希望明天会好一点。",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "seed",
+      "hugCount": 58,
+      "type": "mood",
+      "createdAt": "2026-07-09T02:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hioub1vpcm",
+          "text": "辛苦了，今天先好好休息吧",
+          "nick": "抱枕小熊",
+          "mood": "calm",
+          "createdAt": "2026-07-09T03:17:27.773Z"
+        },
+        {
+          "id": "mrd8hiouamy26l",
+          "text": "抱抱你，明天一定会不一样的",
+          "nick": "漂流瓶",
+          "mood": "sad",
+          "createdAt": "2026-07-09T06:17:27.773Z"
+        },
+        {
+          "id": "mrd8hiou2rsr3g",
+          "text": "我也是，我们一起加油",
+          "nick": "数星星的人",
+          "mood": "hopeful",
+          "createdAt": "2026-07-09T07:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_4",
+      "mood": "anxious",
+      "text": "最近总是有点心不在焉，不知道自己到底在焦虑什么。",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "seed",
+      "hugCount": 19,
+      "type": "mood",
+      "createdAt": "2026-07-09T00:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiout0x2i6",
+          "text": "有时候不知道原因也没关系，先照顾好自己",
+          "nick": "小雨伞",
+          "mood": "calm",
+          "createdAt": "2026-07-09T02:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_5",
+      "mood": "upset",
+      "text": "今天真的很烦躁，什么事都不顺，需要一个安静的角落。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 27,
+      "type": "mood",
+      "createdAt": "2026-07-08T22:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiou1j37hr",
+          "text": "深呼吸，一切都会过去的",
+          "nick": "躲雨的猫",
+          "mood": "calm",
+          "createdAt": "2026-07-08T23:17:27.773Z"
+        },
+        {
+          "id": "mrd8hioupeyn43",
+          "text": "这里就是安静的角落，多待一会儿吧",
+          "nick": "深夜电台",
+          "mood": "calm",
+          "createdAt": "2026-07-09T01:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_6",
+      "mood": "happy",
+      "text": "坚持记录心情满一个月啦，谢谢一直在看我碎碎念的你们。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 63,
+      "type": "mood",
+      "createdAt": "2026-07-08T20:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiouzxhnds",
+          "text": "一个月啦，太棒了！继续加油～",
+          "nick": "慢半拍先生",
+          "mood": "happy",
+          "createdAt": "2026-07-08T21:17:27.773Z"
+        },
+        {
+          "id": "mrd8hioulmnwcy",
+          "text": "见证了你的坚持，很感动",
+          "nick": "晒太阳的鱼",
+          "mood": "grateful",
+          "createdAt": "2026-07-09T00:17:27.773Z"
+        },
+        {
+          "id": "mrd8hioulrqyfb",
+          "text": "下一个月也要一起记录呀",
+          "nick": "路过的云",
+          "mood": "hopeful",
+          "createdAt": "2026-07-09T03:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_7",
+      "mood": "grateful",
+      "text": "谢谢今天陌生人递给我的那把伞，小小的善意会被记很久。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 41,
+      "type": "mood",
+      "createdAt": "2026-07-08T18:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiouwtp8wq",
+          "text": "这种小小的善意真的很治愈",
+          "nick": "漂流瓶",
+          "mood": "grateful",
+          "createdAt": "2026-07-08T20:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_8",
+      "mood": "lonely",
+      "text": "一个人吃饭一个人走路，今天格外觉得安静得有点空。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 23,
+      "type": "mood",
+      "createdAt": "2026-07-08T16:17:27.773Z",
+      "comments": []
+    },
+    {
+      "id": "seed_9",
+      "mood": "hopeful",
+      "text": "投了很久的简历终于有回音了，希望这次能顺利一点。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 30,
+      "type": "mood",
+      "createdAt": "2026-07-08T14:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiou66yrzn",
+          "text": "加油，相信会有好结果的",
+          "nick": "纸飞机",
+          "mood": "hopeful",
+          "createdAt": "2026-07-08T16:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_10",
+      "mood": "tired",
+      "text": "连续加班一周了，只想好好睡一觉，什么都不想干。",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "seed",
+      "hugCount": 37,
+      "type": "mood",
+      "createdAt": "2026-07-08T12:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiou7rfnui",
+          "text": "辛苦了，早点休息吧",
+          "nick": "安静的风",
+          "mood": "calm",
+          "createdAt": "2026-07-08T14:17:27.773Z"
+        },
+        {
+          "id": "mrd8hiouj79uki",
+          "text": "工作再忙也要照顾好自己呀",
+          "nick": "抱枕小熊",
+          "mood": "calm",
+          "createdAt": "2026-07-08T17:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "seed_11",
+      "mood": "wronged",
+      "text": "明明不是我的错，却要我来道歉，心里有点委屈。",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "seed",
+      "hugCount": 25,
+      "type": "mood",
+      "createdAt": "2026-07-08T10:17:27.773Z",
+      "comments": []
+    },
+    {
+      "id": "wall_seed_1",
+      "type": "wall",
+      "category": "confession",
+      "text": "图书馆靠窗第三排的那个女生，你低头看书的样子真的很美。不敢当面说，就在这里悄悄告诉你。",
+      "nickname": "匿名学长",
+      "authorId": "seed",
+      "hugCount": 42,
+      "createdAt": "2026-07-09T05:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiou0pxl93",
+          "text": "好甜啊！希望那个女生能看到",
+          "nick": "吃瓜群众",
+          "mood": "happy",
+          "createdAt": "2026-07-09T06:17:27.773Z"
+        },
+        {
+          "id": "mrd8hiouddb8pn",
+          "text": "鼓起勇气去认识她吧！",
+          "nick": "热心网友",
+          "mood": "hopeful",
+          "createdAt": "2026-07-09T07:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "wall_seed_2",
+      "type": "wall",
+      "category": "rant",
+      "text": "食堂二楼的麻辣香锅今天也太咸了吧！跟打盐的一样，差评！",
+      "nickname": "吃货一枚",
+      "authorId": "seed",
+      "hugCount": 18,
+      "createdAt": "2026-07-09T03:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiou2h2ugv",
+          "text": "哈哈哈哈确实，我上次也被咸到了",
+          "nick": "干饭人",
+          "mood": "upset",
+          "createdAt": "2026-07-09T04:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "wall_seed_3",
+      "type": "wall",
+      "category": "help",
+      "text": "请问一下选课系统里的通识课哪个比较好过？求学长学姐推荐！",
+      "nickname": "大一新生",
+      "authorId": "seed",
+      "hugCount": 12,
+      "createdAt": "2026-07-09T02:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiouixc2om",
+          "text": "中国传统文化概论，不点名不考试",
+          "nick": "老学长",
+          "mood": "calm",
+          "createdAt": "2026-07-09T03:17:27.773Z"
+        },
+        {
+          "id": "mrd8hiounapuf0",
+          "text": "电影赏析也不错，每周看个电影写个感想",
+          "nick": "电影迷",
+          "mood": "happy",
+          "createdAt": "2026-07-09T04:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "wall_seed_4",
+      "type": "wall",
+      "category": "share",
+      "text": "学校北门新开了一家咖啡店，环境超好而且有猫！适合自习和发呆～",
+      "nickname": "探店达人",
+      "authorId": "seed",
+      "hugCount": 35,
+      "createdAt": "2026-07-09T01:17:27.773Z",
+      "comments": []
+    },
+    {
+      "id": "wall_seed_5",
+      "type": "wall",
+      "category": "lostfound",
+      "text": "昨天在体育馆丢失一个黑色水杯，杯盖上有一个小猫贴纸。捡到的同学请联系我，谢谢！",
+      "nickname": "粗心鬼",
+      "authorId": "seed",
+      "hugCount": 8,
+      "createdAt": "2026-07-09T00:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiousx3jsf",
+          "text": "帮顶！希望你尽快找到",
+          "nick": "好心人",
+          "mood": "calm",
+          "createdAt": "2026-07-09T01:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "wall_seed_6",
+      "type": "wall",
+      "category": "greeting",
+      "text": "马上期末考试了，祝大家都能过过过！加油！",
+      "nickname": "锦鲤附体",
+      "authorId": "seed",
+      "hugCount": 67,
+      "createdAt": "2026-07-08T22:17:27.773Z",
+      "comments": [
+        {
+          "id": "mrd8hiouhtklme",
+          "text": "借你吉言！一起加油！",
+          "nick": "复习中",
+          "mood": "hopeful",
+          "createdAt": "2026-07-08T23:17:27.773Z"
+        },
+        {
+          "id": "mrd8hious51bha",
+          "text": "谢谢！祝你也考好！",
+          "nick": "熬夜选手",
+          "mood": "tired",
+          "createdAt": "2026-07-09T00:17:27.773Z"
+        }
+      ]
+    },
+    {
+      "id": "mrd8jn09wz8tp9",
+      "type": "mood",
+      "category": null,
+      "nickname": null,
+      "mood": "happy",
+      "text": "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦",
+      "bg": "paper",
+      "duration": "permanent",
+      "authorId": "u_mrd8ihw70aa4",
+      "hugCount": 0,
+      "createdAt": "2026-07-09T08:19:06.681Z",
+      "expireAt": "2026-07-10T08:19:06.681Z",
+      "comments": []
+    }
+  ]
+}
