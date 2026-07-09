@@ -1,0 +1,48 @@
+{
+  "posts": [
+    {
+      "id": "mrd3gup7z7p0n6",
+      "mood": "calm",
+      "text": "看到这个说明启动成功",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "u_mraoyjplfibm",
+      "hugCount": 6,
+      "createdAt": "2026-07-09T05:56:58.603Z",
+      "expireAt": "2026-07-10T05:56:58.603Z",
+      "comments": [
+        {
+          "id": "mrd3jv51b5ou53",
+          "text": "好的",
+          "nick": "数星星的人",
+          "mood": "tired",
+          "createdAt": "2026-07-09T05:59:19.141Z"
+        }
+      ]
+    },
+    {
+      "id": "mrd3iskryqtzcy",
+      "mood": "happy",
+      "text": "看到了111",
+      "bg": "paper",
+      "duration": "24h",
+      "authorId": "u_mrap1z8gy1bc",
+      "hugCount": 14,
+      "createdAt": "2026-07-09T05:58:29.163Z",
+      "expireAt": "2026-07-10T05:58:29.163Z",
+      "comments": []
+    },
+    {
+      "id": "mrd3ysm0r3doax",
+      "mood": "calm",
+      "text": "测试1111",
+      "bg": "mist",
+      "duration": "24h",
+      "authorId": "u_mrap1z8gy1bc",
+      "hugCount": 0,
+      "createdAt": "2026-07-09T06:10:55.704Z",
+      "expireAt": "2026-07-10T06:10:55.704Z",
+      "comments": []
+    }
+  ]
+}
