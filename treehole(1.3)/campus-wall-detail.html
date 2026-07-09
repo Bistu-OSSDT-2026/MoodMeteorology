@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>留言详情 · 校园墙 · 树洞</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F7F4EE; --bg-elevated:#FFFFFF;
+  --ink:#2B2A28; --ink-soft:#6B6660; --ink-faint:#9C968C;
+  --border:rgba(43,42,40,.10); --shadow:rgba(43,42,40,.07);
+  --accent-sky:#7B93AE; --accent-sky-soft:#DCE4EC;
+  --accent-dawn:#E3A587; --accent-dawn-soft:#F6E4D8;
+  --wall-accent:#D4886E; --wall-accent-soft:#F6E4D8;
+  --font-display:"Noto Serif SC", serif; --font-body:"Noto Sans SC", sans-serif; --font-hand:"Ma Shan Zheng", cursive;
+  --radius-s:10px; --radius-m:16px; --radius-l:28px;
+  --nav-h:64px; --container:760px; --transition:.28s cubic-bezier(.4,0,.2,1);
+}
+html.dark{
+  --bg:#14161D; --bg-elevated:#1C1F27;
+  --ink:#EAE6DD; --ink-soft:#A79F92; --ink-faint:#726B60;
+  --border:rgba(234,230,221,.08); --shadow:rgba(0,0,0,.35);
+  --accent-sky:#8FA8C2; --accent-sky-soft:#26303C;
+  --accent-dawn:#E8B79A; --accent-dawn-soft:#3A2C24;
+  --wall-accent:#E8B79A; --wall-accent-soft:#3A2C24;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body); line-height:1.7; transition:background var(--transition), color var(--transition); -webkit-font-smoothing:antialiased;}
+h1,h2,.font-display{font-family:var(--font-display);}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+:focus-visible{outline:2px solid var(--accent-sky); outline-offset:3px; border-radius:4px;}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s !important; transition-duration:.001s !important;}}
+.icon-sprite{position:absolute; width:0; height:0; overflow:hidden;}
+.icon{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0;}
+
+.site-header{position:sticky; top:0; z-index:100; height:var(--nav-h); display:flex; align-items:center; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--border);}
+.site-header .inner{width:100%; max-width:1180px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between;}
+.logo{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:19px;}
+.logo .icon{width:23px; height:23px; color:var(--accent-sky);}
+.logo .sub{font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); font-weight:400;}
+.nav-links{display:flex; gap:6px;}
+.nav-links a{padding:9px 16px; border-radius:999px; font-size:14.5px; color:var(--ink-soft); transition:background var(--transition), color var(--transition);}
+.nav-links a:hover{background:var(--accent-sky-soft); color:var(--ink);}
+.theme-toggle{width:38px; height:38px; border-radius:50%; border:1px solid var(--border); background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; transition:transform var(--transition);}
+.theme-toggle:hover{transform:rotate(18deg);}
+.theme-toggle .icon{width:18px; height:18px; color:var(--ink-soft);}
+.theme-toggle .icon-moon{display:none;} html.dark .theme-toggle .icon-sun{display:none;} html.dark .theme-toggle .icon-moon{display:inline-block;}
+@media (max-width:640px){ .nav-links{display:none;} }
+
+.detail-wrap{max-width:var(--container); margin:0 auto; padding:28px 20px 80px;}
+
+.back-link{
+  display:inline-flex; align-items:center; gap:6px; font-size:13.5px; color:var(--ink-faint);
+  margin-bottom:18px; transition:color var(--transition), gap var(--transition);
+}
+.back-link:hover{color:var(--wall-accent); gap:9px;}
+.back-link .icon{width:15px; height:15px;}
+
+.post-card{
+  border-radius:var(--radius-l); padding:26px; margin-bottom:28px;
+  border:1px solid var(--border); box-shadow:0 16px 40px -26px var(--shadow);
+  background:var(--bg-elevated);
+}
+
+.post-head{display:flex; align-items:center; gap:12px; margin-bottom:16px;}
+.avatar{
+  width:44px; height:44px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; color:#fff;
+  font-weight:700; font-size:16px; box-shadow:0 4px 12px -4px var(--shadow);
+  background:var(--wall-accent);
+}
+.post-who{display:flex; flex-direction:column; gap:2px;}
+.post-who .nick{font-size:14.5px; font-weight:600;}
+.post-who .meta{font-size:12px; color:var(--ink-faint); display:flex; align-items:center; gap:6px;}
+.cate-tag{display:inline-flex; align-items:center; gap:3px; padding:2px 9px; border-radius:999px; font-size:11px; color:#fff; font-weight:500;}
+
+.post-body{font-size:16px; color:var(--ink); line-height:1.9; margin:0 0 20px; white-space:pre-wrap; word-break:break-word;}
+
+.post-actions{display:flex; align-items:center; gap:12px;}
+.hug-btn{
+  display:flex; align-items:center; gap:7px; padding:9px 18px; border-radius:999px;
+  border:1.5px solid var(--border); background:var(--bg-elevated); color:var(--ink-soft); font-size:13.5px;
+  transition:all var(--transition);
+}
+.hug-btn .icon{width:16px; height:16px; transition:transform var(--transition);}
+.hug-btn:hover{border-color:var(--wall-accent); color:var(--ink);}
+.hug-btn.hugged{background:var(--wall-accent-soft); border-color:var(--wall-accent); color:var(--ink);}
+.hug-btn.hugged .icon{color:var(--wall-accent); animation:pop .4s ease;}
+@keyframes pop{0%{transform:scale(1);} 40%{transform:scale(1.35);} 100%{transform:scale(1);}}
+.time-note{font-size:12px; color:var(--ink-faint); margin-left:auto;}
+.delete-post-btn{
+  display:flex; align-items:center; gap:6px; padding:9px 16px; border-radius:999px;
+  border:1.5px solid var(--border); background:var(--bg-elevated); color:var(--ink-faint); font-size:13px;
+  transition:all var(--transition);
+}
+.delete-post-btn .icon{width:14px; height:14px;}
+.delete-post-btn:hover{border-color:var(--wall-accent); color:var(--wall-accent);}
+.delete-confirm{
+  margin-top:14px; padding:14px; border-radius:var(--radius-m); background:var(--bg);
+  border:1px dashed var(--border); display:none; align-items:center; justify-content:space-between; gap:12px;
+  font-size:13px; color:var(--ink-soft); flex-wrap:wrap;
+}
+.delete-confirm.show{display:flex;}
+.delete-confirm .row{display:flex; gap:8px;}
+.delete-confirm button{padding:7px 16px; border-radius:999px; font-size:12.5px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--ink-soft);}
+.delete-confirm button.danger{background:var(--wall-accent); color:#fff; border:none;}
+
+.comment-section-title{
+  font-size:15px; font-weight:600; color:var(--ink-soft); margin:0 0 18px;
+  display:flex; align-items:center; gap:8px;
+}
+.comment-section-title .icon{width:16px; height:16px; color:var(--wall-accent);}
+.comment-section-title .count{color:var(--ink-faint); font-weight:400;}
+
+.comment-list{display:flex; flex-direction:column; gap:16px; margin-bottom:28px;}
+.comment-floor{
+  display:flex; gap:12px; padding:16px; border-radius:var(--radius-m);
+  background:var(--bg-elevated); border:1px solid var(--border);
+  animation:riseIn .32s ease;
+}
+@keyframes riseIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+.comment-floor .avatar{width:36px; height:36px; font-size:13px;}
+.comment-body{flex:1; min-width:0;}
+.comment-top{display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;}
+.comment-top .nick{font-size:13.5px; font-weight:600;}
+.comment-top .floor-num{font-size:11.5px; color:var(--ink-faint); background:var(--bg); padding:1px 8px; border-radius:999px;}
+.comment-top .time{font-size:11.5px; color:var(--ink-faint); margin-left:auto;}
+.comment-text{font-size:14px; color:var(--ink); line-height:1.65; margin:0; word-break:break-word;}
+
+.comment-composer{
+  background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-m);
+  padding:16px; position:sticky; bottom:16px; box-shadow:0 12px 32px -18px var(--shadow);
+}
+.composer-row{display:flex; gap:10px; align-items:flex-end;}
+.composer-row textarea{
+  flex:1; resize:none; min-height:44px; max-height:120px;
+  border:1.5px solid var(--border); border-radius:var(--radius-s); background:var(--bg);
+  color:var(--ink); font-family:var(--font-body); font-size:14px; padding:11px 14px; line-height:1.5;
+  transition:border-color var(--transition);
+}
+.composer-row textarea::placeholder{color:var(--ink-faint); font-family:var(--font-hand); font-size:14.5px;}
+.composer-row textarea:focus{outline:none; border-color:var(--accent-sky);}
+.composer-send{
+  flex-shrink:0; width:44px; height:44px; border-radius:50%; border:none;
+  background:var(--wall-accent); color:#fff; display:flex; align-items:center; justify-content:center;
+  transition:background var(--transition), transform var(--transition), opacity var(--transition);
+}
+.composer-send:hover:not(:disabled){background:color-mix(in srgb, var(--wall-accent) 85%, #000);}
+.composer-send:disabled{opacity:.4; cursor:not-allowed;}
+.composer-send .icon{width:18px; height:18px;}
+.composer-hint{font-size:11.5px; color:var(--ink-faint); margin-top:8px; display:flex; justify-content:space-between;}
+
+.empty-comments{text-align:center; padding:32px 0; color:var(--ink-faint); font-size:13.5px;}
+.empty-comments .icon{width:28px; height:28px; margin-bottom:8px; opacity:.6;}
+
+.empty-post{text-align:center; padding:70px 20px; color:var(--ink-faint);}
+.empty-post p{font-size:14.5px; margin:0 0 16px;}
+.empty-post a{color:var(--wall-accent); font-size:13.5px; text-decoration:underline;}
+
+.site-footer{border-top:1px solid var(--border); padding:32px 24px; text-align:center; color:var(--ink-faint); font-size:12px;}
+
+@media (max-width:520px){
+  .post-actions{flex-wrap:wrap;}
+  .time-note{margin-left:0;}
+}
+</style>
+</head>
+<body>
+
+<svg class="icon-sprite" aria-hidden="true">
+  <symbol id="i-hole" viewBox="0 0 24 24"><path d="M6.2 4c-2.1 1.1-3.2 3.5-3.2 6.5 0 5.6 4 10.5 9 10.5s9-4.9 9-10.5c0-3-1.1-5.4-3.2-6.5"/><ellipse cx="12" cy="10.6" rx="3.6" ry="4.3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.8-9.3C.6 7.8 2.4 4.5 5.7 4c2-.3 3.8.6 4.9 2.3C11.7 4.7 13.6 3.7 15.6 4c3.3.5 5.1 3.8 3.5 7.2C16.8 16 12 20.5 12 20.5Z"/></symbol>
+  <symbol id="i-comment" viewBox="0 0 24 24"><path d="M4 5.5h16v11H8.5L4 20.5V5.5Z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-3-6-7-2Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M9 7V5.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5.5V7M7 7l1 12.5A1.5 1.5 0 0 0 9.5 21h5a1.5 1.5 0 0 0 1.5-1.5L17 7"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="inner">
+    <a href="/wall" class="logo">
+      <svg class="icon"><use href="#i-hole"/></svg>
+      树洞
+      <span class="sub">· 校园墙</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/wall">校园墙</a>
+      <a href="/wall/compose">发布留言</a>
+      <a href="/">树洞广场</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换深色模式">
+      <svg class="icon icon-sun"><use href="#i-sun"/></svg>
+      <svg class="icon icon-moon"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="detail-wrap">
+
+  <a href="/wall" class="back-link">
+    <svg class="icon"><use href="#i-arrow-left"/></svg>返回校园墙
+  </a>
+
+  <div id="postArea"></div>
+
+</div>
+
+<footer class="site-footer">© 2026 树洞 · 校园墙 · 每一句话都值得被听见</footer>
+
+<script>
+const root = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ews-theme');
+if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) root.classList.add('dark');
+themeToggle.addEventListener('click', () => {
+  root.classList.toggle('dark');
+  localStorage.setItem('ews-theme', root.classList.contains('dark') ? 'dark' : 'light');
+});
+
+function getAuthorId() {
+  let id = localStorage.getItem('treehole_author_id');
+  if (!id) { id = 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); localStorage.setItem('treehole_author_id', id); }
+  return id;
+}
+const myAuthorId = getAuthorId();
+
+const CATEGORIES = {
+  confession:{label:'表白',icon:'💕',color:'#E8787A'},
+  rant:{label:'吐槽',icon:'💢',color:'#E8A84B'},
+  help:{label:'求助',icon:'📢',color:'#6BA3D9'},
+  share:{label:'分享',icon:'✨',color:'#7FBF7F'},
+  lostfound:{label:'寻物',icon:'🔍',color:'#B899D4'},
+  ask:{label:'打听',icon:'❓',color:'#E8A07A'},
+  greeting:{label:'祝福',icon:'🎉',color:'#E8C84B'}
+};
+const NICKNAMES = ['路过的同学','隔壁老王','操场上的风','图书馆的猫','食堂干饭人','自习室幽灵','校园小喇叭','奶茶续命中','早八睡不醒','晚课摸鱼中'];
+
+function timeAgo(ts){
+  const diff = Date.now() - (typeof ts === 'string' ? new Date(ts).getTime() : ts);
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return '刚刚';
+  if (min < 60) return min + ' 分钟前';
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return hr + ' 小时前';
+  return Math.floor(hr / 24) + ' 天前';
+}
+
+async function fetchPost(id){
+  const res = await fetch('/api/posts/' + encodeURIComponent(id));
+  if (!res.ok) return null;
+  return await res.json();
+}
+
+async function hugPost(id, action){
+  const res = await fetch('/api/posts/' + encodeURIComponent(id) + '/hug', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: action || 'hug' })
+  });
+  if (!res.ok) return null;
+  return await res.json();
+}
+
+async function deletePostAPI(id){
+  const res = await fetch('/api/posts/' + encodeURIComponent(id), { method: 'DELETE' });
+  return res.ok;
+}
+
+async function addComment(id, text){
+  const nick = NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)];
+  const res = await fetch('/api/posts/' + encodeURIComponent(id) + '/comments', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, nick, mood: 'calm' })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || '评论失败');
+  return data;
+}
+
+const params = new URLSearchParams(location.search);
+const postId = params.get('id');
+const postArea = document.getElementById('postArea');
+
+async function init(){
+  if (!postId) {
+    postArea.innerHTML = '<div class="empty-post"><p>参数错误</p><a href="/wall">返回校园墙</a></div>';
+    return;
+  }
+  const post = await fetchPost(postId);
+
+  if (!post || (post.type && post.type !== 'wall')){
+    postArea.innerHTML = '';
+    const empty = document.createElement('div');
+    empty.className = 'empty-post';
+    const p = document.createElement('p');
+    p.textContent = '这条留言已经不见了。';
+    const a = document.createElement('a');
+    a.href = '/wall';
+    a.textContent = '返回校园墙';
+    empty.append(p, a);
+    postArea.appendChild(empty);
+    return;
+  }
+
+  const isOwn = post.authorId === myAuthorId;
+  const nickname = post.nickname || '匿名同学';
+  const catInfo = CATEGORIES[post.category] || {label:'其他',icon:'📌',color:'#999'};
+  const allComments = post.comments || [];
+
+  postArea.innerHTML =
+    '<div class="post-card" id="postCard">' +
+      '<div class="post-head">' +
+        '<div class="avatar" id="postAvatar">' + nickname.charAt(0) + '</div>' +
+        '<div class="post-who">' +
+          '<span class="nick" id="postNick">' + nickname + '</span>' +
+          '<span class="meta"><span class="cate-tag" id="postCateTag" style="background:' + catInfo.color + '">' + catInfo.icon + ' ' + catInfo.label + '</span><span id="postTime">' + timeAgo(post.createdAt) + '</span></span>' +
+        '</div>' +
+      '</div>' +
+      '<p class="post-body" id="postBody">' + post.text + '</p>' +
+      '<div class="post-actions">' +
+        '<button class="hug-btn" id="hugBtn"><svg class="icon"><use href="#i-heart"/></svg><span id="hugCount">' + (post.hugCount || 0) + '</span> 点赞</button>' +
+        '<span class="time-note">发布于 ' + new Date(post.createdAt).toLocaleDateString('zh-CN') + '</span>' +
+        (isOwn ? '<button class="delete-post-btn" id="deletePostBtn"><svg class="icon"><use href="#i-trash"/></svg>删除</button>' : '') +
+      '</div>' +
+      (isOwn ? '<div class="delete-confirm" id="deleteConfirm"><span>删除这条留言吗？删除后无法恢复</span><div class="row"><button data-act="cancel">再想想</button><button data-act="confirm" class="danger">确定删除</button></div></div>' : '') +
+    '</div>' +
+    '<h2 class="comment-section-title"><svg class="icon"><use href="#i-comment"/></svg>留言回复 <span class="count" id="commentCount"></span></h2>' +
+    '<div class="comment-list" id="commentList"></div>' +
+    '<div class="comment-composer">' +
+      '<div class="composer-row">' +
+        '<textarea id="commentInput" maxlength="200" placeholder="回复这条留言……" rows="1"></textarea>' +
+        '<button class="composer-send" id="commentSend" disabled><svg class="icon"><use href="#i-send"/></svg></button>' +
+      '</div>' +
+      '<div class="composer-hint"><span>匿名回复，最多 200 字</span><span id="commentCharCount">0 / 200</span></div>' +
+    '</div>';
+
+  const hugBtn = document.getElementById('hugBtn');
+  let hugged = false;
+  hugBtn.addEventListener('click', async () => {
+    const action = hugged ? 'unhug' : 'hug';
+    const result = await hugPost(postId, action);
+    if (result) {
+      hugged = !hugged;
+      const countEl = document.getElementById('hugCount');
+      countEl.textContent = result.hugCount;
+      hugBtn.classList.toggle('hugged', hugged);
+    }
+  });
+
+  if (isOwn){
+    const deleteBtn = document.getElementById('deletePostBtn');
+    const deleteConfirm = document.getElementById('deleteConfirm');
+    deleteBtn.addEventListener('click', () => deleteConfirm.classList.add('show'));
+    deleteConfirm.addEventListener('click', async (e) => {
+      const act = e.target.dataset.act;
+      if (act === 'cancel'){
+        deleteConfirm.classList.remove('show');
+      } else if (act === 'confirm'){
+        const ok = await deletePostAPI(postId);
+        if (ok) window.location.href = '/wall';
+      }
+    });
+  }
+
+  const commentList = document.getElementById('commentList');
+  const commentCountEl = document.getElementById('commentCount');
+  let floorNum = 1;
+
+  function renderComment(text, timeText, nick){
+    const floor = document.createElement('div');
+    floor.className = 'comment-floor';
+
+    const av = document.createElement('div');
+    av.className = 'avatar';
+    av.style.background = 'var(--wall-accent)';
+    av.textContent = nick.charAt(0);
+
+    const body = document.createElement('div');
+    body.className = 'comment-body';
+
+    const top = document.createElement('div');
+    top.className = 'comment-top';
+    const nickEl = document.createElement('span'); nickEl.className = 'nick'; nickEl.textContent = nick;
+    const floorEl = document.createElement('span'); floorEl.className = 'floor-num'; floorEl.textContent = floorNum + '楼';
+    const timeEl = document.createElement('span'); timeEl.className = 'time'; timeEl.textContent = timeText;
+    top.append(nickEl, floorEl, timeEl);
+
+    const textEl = document.createElement('p');
+    textEl.className = 'comment-text';
+    textEl.textContent = text;
+
+    body.append(top, textEl);
+    floor.append(av, body);
+    floorNum++;
+    commentList.appendChild(floor);
+  }
+
+  function updateCommentCount(total){
+    commentCountEl.textContent = '（' + total + '）';
+  }
+
+  if (allComments.length === 0){
+    commentList.innerHTML = '<div class="empty-comments"><svg class="icon"><use href="#i-comment"/></svg><div>还没有回复，来写第一条吧</div></div>';
+  } else {
+    allComments.forEach(c => {
+      renderComment(c.text, timeAgo(c.createdAt), c.nick);
+    });
+  }
+  updateCommentCount(allComments.length);
+
+  const commentInput = document.getElementById('commentInput');
+  const commentSend = document.getElementById('commentSend');
+  const commentCharCount = document.getElementById('commentCharCount');
+
+  commentInput.addEventListener('input', () => {
+    commentInput.style.height = 'auto';
+    commentInput.style.height = Math.min(commentInput.scrollHeight, 120) + 'px';
+    const len = commentInput.value.trim().length;
+    commentCharCount.textContent = commentInput.value.length + ' / 200';
+    commentSend.disabled = len === 0;
+  });
+
+  async function submitComment(){
+    const text = commentInput.value.trim();
+    if (!text) return;
+
+    const emptyState = commentList.querySelector('.empty-comments');
+    if (emptyState) emptyState.remove();
+
+    const nick = NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)];
+
+    try {
+      const result = await addComment(postId, text);
+      if (result){
+        renderComment(result.text, '刚刚', result.nick);
+        updateCommentCount(commentList.querySelectorAll('.comment-floor').length);
+      }
+    } catch(e) {
+      alert(e.message || '评论失败，请稍后再试');
+      return;
+    }
+
+    commentInput.value = '';
+    commentInput.style.height = 'auto';
+    commentCharCount.textContent = '0 / 200';
+    commentSend.disabled = true;
+  }
+
+  commentSend.addEventListener('click', submitComment);
+  commentInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); submitComment(); }
+  });
+}
+
+init();
+</script>
+
+</body>
+</html>
