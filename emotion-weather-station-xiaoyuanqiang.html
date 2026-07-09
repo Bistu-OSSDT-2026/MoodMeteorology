@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>写下此刻的心情 · 树洞</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F7F4EE; --bg-elevated:#FFFFFF;
+  --ink:#2B2A28; --ink-soft:#6B6660; --ink-faint:#9C968C;
+  --border:rgba(43,42,40,.10); --shadow:rgba(43,42,40,.07);
+  --accent-sky:#7B93AE; --accent-sky-soft:#DCE4EC;
+  --accent-dawn:#E3A587; --accent-dawn-soft:#F6E4D8;
+  --mist:#C9C2B4;
+  --bg-glow-1:rgba(232,184,75,.10); --bg-glow-2:rgba(123,147,174,.08); --bg-glow-3:rgba(227,165,135,.07);
+  --m-happy:#E8B84B; --m-calm:#9FB4C7; --m-sad:#6E86A6; --m-upset:#A9615F; --m-anxious:#AFA0C4;
+  --font-display:"Noto Serif SC", serif; --font-body:"Noto Sans SC", sans-serif; --font-hand:"Ma Shan Zheng", cursive;
+  --radius-s:10px; --radius-m:16px; --radius-l:28px;
+  --nav-h:64px; --container:820px; --transition:.28s cubic-bezier(.4,0,.2,1);
+}
+html.dark{
+  --bg:#14161D; --bg-elevated:#1C1F27;
+  --ink:#EAE6DD; --ink-soft:#A79F92; --ink-faint:#726B60;
+  --border:rgba(234,230,221,.08); --shadow:rgba(0,0,0,.35);
+  --accent-sky:#8FA8C2; --accent-sky-soft:#26303C;
+  --accent-dawn:#E8B79A; --accent-dawn-soft:#3A2C24; --mist:#3C3F49;
+  --bg-glow-1:rgba(227,165,135,.07); --bg-glow-2:rgba(143,168,194,.05); --bg-glow-3:rgba(232,183,108,.04);
+  --m-happy:#E3BD6C; --m-calm:#8FA4B8; --m-sad:#7189AA; --m-upset:#B47774; --m-anxious:#B0A2C9;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); background-image:radial-gradient(ellipse at 20% 40%,var(--bg-glow-1) 0%,transparent 55%),radial-gradient(ellipse at 80% 25%,var(--bg-glow-2) 0%,transparent 50%),radial-gradient(ellipse at 45% 75%,var(--bg-glow-3) 0%,transparent 45%),radial-gradient(ellipse at 10% 80%,var(--mist) 0%,transparent 40%);background-attachment:fixed;background-size:cover; color:var(--ink); font-family:var(--font-body); line-height:1.7; transition:background var(--transition), color var(--transition); -webkit-font-smoothing:antialiased;}
+h1,h2,.font-display{font-family:var(--font-display);}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+:focus-visible{outline:2px solid var(--accent-sky); outline-offset:3px; border-radius:4px;}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s !important; transition-duration:.001s !important;}}
+.icon-sprite{position:absolute; width:0; height:0; overflow:hidden;}
+.icon{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0;}
+
+.site-header{position:sticky; top:0; z-index:100; height:var(--nav-h); display:flex; align-items:center; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--border);}
+.site-header .inner{width:100%; max-width:1180px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between;}
+.logo{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:19px;}
+.logo .icon{width:23px; height:23px; color:var(--accent-sky);}
+.logo .sub{font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); font-weight:400;}
+.nav-links{display:flex; gap:6px;}
+.nav-links a{padding:9px 16px; border-radius:999px; font-size:14.5px; color:var(--ink-soft); transition:background var(--transition), color var(--transition);}
+.nav-links a:hover{background:var(--accent-sky-soft); color:var(--ink);}
+.nav-links a.active{background:var(--accent-sky); color:#fff;}
+.theme-toggle{width:38px; height:38px; border-radius:50%; border:1px solid var(--border); background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; transition:transform var(--transition);}
+.theme-toggle:hover{transform:rotate(18deg);}
+.theme-toggle .icon{width:18px; height:18px; color:var(--ink-soft);}
+.theme-toggle .icon-moon{display:none;} html.dark .theme-toggle .icon-sun{display:none;} html.dark .theme-toggle .icon-moon{display:inline-block;}
+/* 背景氛围层 */
+.bg-atmosphere{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bg-atmosphere .orb{position:absolute;border-radius:50%;animation:orbFloat 30s ease-in-out infinite}
+.bg-atmosphere .orb:nth-child(1){width:450px;height:450px;top:-120px;left:-80px;background:radial-gradient(circle,var(--bg-glow-1),transparent 70%)}
+.bg-atmosphere .orb:nth-child(2){width:350px;height:350px;bottom:-80px;right:-60px;background:radial-gradient(circle,var(--bg-glow-2),transparent 70%);animation-delay:-10s}
+.bg-atmosphere .orb:nth-child(3){width:250px;height:250px;top:35%;left:55%;background:radial-gradient(circle,var(--bg-glow-3),transparent 70%);animation-delay:-18s}
+.bg-atmosphere .dust{position:absolute;border-radius:50%;animation:dustFloat 20s infinite;opacity:0}
+.bg-atmosphere .dust:nth-child(4){left:20%;top:20%;width:3px;height:3px;animation-duration:25s;animation-delay:0s;background:var(--accent-dawn)}
+.bg-atmosphere .dust:nth-child(5){left:50%;top:60%;width:5px;height:5px;animation-duration:18s;animation-delay:-6s;background:var(--accent-sky)}
+.bg-atmosphere .dust:nth-child(6){left:75%;top:30%;width:4px;height:4px;animation-duration:22s;animation-delay:-12s;background:var(--accent-dawn)}
+.bg-atmosphere .dust:nth-child(7){left:30%;top:75%;width:3px;height:3px;animation-duration:20s;animation-delay:-4s;background:var(--accent-sky)}
+.bg-atmosphere .dust:nth-child(8){left:85%;top:65%;width:4px;height:4px;animation-duration:26s;animation-delay:-9s;background:var(--accent-dawn)}
+.bg-atmosphere .dust:nth-child(9){left:10%;top:50%;width:5px;height:5px;animation-duration:19s;animation-delay:-15s;background:var(--accent-sky)}
+.bg-atmosphere .dust:nth-child(10){left:65%;top:80%;width:3px;height:3px;animation-duration:23s;animation-delay:-3s;background:var(--accent-dawn)}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(35px,-25px)scale(1.06)}66%{transform:translate(-20px,20px)scale(.94)}}
+@keyframes dustFloat{0%{transform:translateY(0)translateX(0)rotate(0);opacity:0}8%{opacity:.4}90%{opacity:.15}100%{transform:translateY(-90vh)translateX(30px)rotate(180deg);opacity:0}}
+
+.compose-wrap{position:relative;z-index:1;max-width:var(--container); margin:0 auto; padding:40px 20px 80px;}
+.compose-head{text-align:center; margin-bottom:32px;}
+.compose-head h1{font-size:26px; margin:0 0 8px; font-weight:600;}
+.compose-head p{font-family:var(--font-hand); font-size:17px; color:var(--ink-faint); margin:0;}
+
+.compose-card{
+  background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-l);
+  padding:28px; box-shadow:0 16px 40px -24px var(--shadow);
+}
+
+.field-label{display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:var(--ink-soft); margin-bottom:12px;}
+.field-label .icon{width:15px; height:15px; color:var(--accent-dawn);}
+.field-block{margin-bottom:28px;}
+.field-block:last-child{margin-bottom:0;}
+
+/* ---- 心情选择：色块 + 词，不用天气图标 ---- */
+.mood-picker{display:flex; gap:10px; flex-wrap:wrap;}
+.mood-btn{
+  flex:1; min-width:88px; display:flex; flex-direction:column; align-items:center; gap:9px;
+  padding:16px 8px; border-radius:var(--radius-m); border:1.5px solid var(--border);
+  background:var(--bg); color:var(--ink-soft);
+  transition:all var(--transition);
+}
+.mood-btn .dot{width:18px; height:18px; border-radius:50%;}
+.mood-btn span.label{font-size:12.5px;}
+.mood-btn[data-mood="happy"] .dot{background:var(--m-happy);}
+.mood-btn[data-mood="calm"] .dot{background:var(--m-calm);}
+.mood-btn[data-mood="sad"] .dot{background:var(--m-sad);}
+.mood-btn[data-mood="upset"] .dot{background:var(--m-upset);}
+.mood-btn[data-mood="anxious"] .dot{background:var(--m-anxious);}
+.mood-btn:hover{transform:translateY(-2px); border-color:var(--mist);}
+.mood-btn.selected{background:var(--accent-sky-soft); border-color:var(--accent-sky); color:var(--ink); font-weight:500;}
+.mood-btn.selected[data-mood="happy"]{background:color-mix(in srgb, var(--m-happy) 16%, var(--bg-elevated)); border-color:var(--m-happy);}
+.mood-btn.selected[data-mood="calm"]{background:color-mix(in srgb, var(--m-calm) 16%, var(--bg-elevated)); border-color:var(--m-calm);}
+.mood-btn.selected[data-mood="sad"]{background:color-mix(in srgb, var(--m-sad) 16%, var(--bg-elevated)); border-color:var(--m-sad);}
+.mood-btn.selected[data-mood="upset"]{background:color-mix(in srgb, var(--m-upset) 16%, var(--bg-elevated)); border-color:var(--m-upset);}
+.mood-btn.selected[data-mood="anxious"]{background:color-mix(in srgb, var(--m-anxious) 16%, var(--bg-elevated)); border-color:var(--m-anxious);}
+
+.textarea-wrap{position:relative;}
+textarea#moodText{
+  width:100%; min-height:140px; resize:vertical;
+  padding:16px; border-radius:var(--radius-m); border:1.5px solid var(--border);
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:15px; line-height:1.75;
+  transition:border-color var(--transition), background var(--transition);
+}
+textarea#moodText::placeholder{color:var(--ink-faint); font-family:var(--font-hand); font-size:15.5px;}
+textarea#moodText:focus{outline:none; border-color:var(--accent-sky); background:var(--bg-elevated);}
+textarea#moodText.invalid{border-color:var(--m-upset);}
+.char-count{position:absolute; right:14px; bottom:10px; font-size:11.5px; color:var(--ink-faint);}
+.char-count.warn{color:var(--m-upset);}
+.field-error{font-size:12.5px; color:var(--m-upset); margin-top:8px; display:none; align-items:center; gap:5px;}
+.field-error.show{display:flex;}
+.field-error .icon{width:13px; height:13px;}
+
+.phrase-list{display:flex; gap:8px; flex-wrap:wrap;}
+.phrase-chip{
+  padding:8px 15px; border-radius:999px; border:1px solid var(--border);
+  background:var(--bg); color:var(--ink-soft); font-size:13px;
+  transition:all var(--transition);
+}
+.phrase-chip:hover{background:var(--accent-dawn-soft); border-color:var(--accent-dawn); color:var(--ink);}
+.phrase-chip:active{transform:scale(.96);}
+
+.bg-picker{display:flex; gap:12px; flex-wrap:wrap;}
+.bg-swatch{
+  width:44px; height:44px; border-radius:50%; border:2px solid transparent;
+  cursor:pointer; position:relative; transition:transform var(--transition), border-color var(--transition);
+}
+.bg-swatch:hover{transform:scale(1.08);}
+.bg-swatch.selected{border-color:var(--ink);}
+.bg-swatch.selected::after{content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:15px; text-shadow:0 1px 2px rgba(0,0,0,.3);}
+.bg-swatch[data-bg="paper"]{background:linear-gradient(135deg,#F7F4EE,#EDE7DA);}
+.bg-swatch[data-bg="sky"]{background:linear-gradient(135deg,#DCE4EC,#B9CADC);}
+.bg-swatch[data-bg="dawn"]{background:linear-gradient(135deg,#F6E4D8,#EAC5AD);}
+.bg-swatch[data-bg="mist"]{background:linear-gradient(135deg,#E8E4F0,#CFC5DE);}
+.bg-swatch[data-bg="night"]{background:linear-gradient(135deg,#2B2E3A,#181A22);}
+
+.duration-picker{display:flex; gap:10px;}
+.duration-btn{
+  flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:13px; border-radius:var(--radius-m); border:1.5px solid var(--border);
+  background:var(--bg); color:var(--ink-soft); font-size:13.5px;
+  transition:all var(--transition);
+}
+.duration-btn .icon{width:16px; height:16px;}
+.duration-btn:hover{border-color:var(--mist);}
+.duration-btn.selected{background:var(--accent-sky-soft); border-color:var(--accent-sky); color:var(--ink); font-weight:500;}
+
+.submit-row{display:flex; align-items:center; justify-content:space-between; margin-top:32px; gap:16px;}
+.anon-note{font-size:12px; color:var(--ink-faint); display:flex; align-items:center; gap:5px;}
+.anon-note .icon{width:14px; height:14px;}
+.submit-btn{
+  padding:13px 32px; border-radius:999px; border:none;
+  background:var(--accent-sky); color:#fff; font-size:15px; font-weight:500;
+  display:flex; align-items:center; gap:8px;
+  transition:background var(--transition), transform var(--transition), opacity var(--transition);
+}
+.submit-btn:hover:not(:disabled){background:color-mix(in srgb, var(--accent-sky) 85%, #000);}
+.submit-btn:active:not(:disabled){transform:scale(.97);}
+.submit-btn:disabled{opacity:.45; cursor:not-allowed;}
+.submit-btn .icon{width:16px; height:16px;}
+.submit-btn .spinner{width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none;}
+.submit-btn.loading .spinner{display:inline-block;}
+.submit-btn.loading .btn-icon, .submit-btn.loading .btn-text{opacity:.6;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(20,18,15,.45); backdrop-filter:blur(3px);
+  display:flex; align-items:center; justify-content:center; z-index:200;
+  opacity:0; pointer-events:none; transition:opacity var(--transition);
+}
+.modal-overlay.show{opacity:1; pointer-events:auto;}
+.modal-card{
+  background:var(--bg-elevated); border-radius:var(--radius-l); padding:36px 32px;
+  max-width:340px; text-align:center; transform:translateY(14px) scale(.96); opacity:0;
+  transition:transform var(--transition), opacity var(--transition); box-shadow:0 24px 60px -20px rgba(0,0,0,.3);
+}
+.modal-overlay.show .modal-card{transform:translateY(0) scale(1); opacity:1;}
+.modal-icon{width:48px; height:48px; margin:0 auto 16px; color:var(--accent-sky); animation:float 2.4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);}}
+.modal-card h3{margin:0 0 8px; font-size:18px; font-family:var(--font-display);}
+.modal-card p{margin:0 0 24px; font-size:13.5px; color:var(--ink-soft);}
+.modal-actions{display:flex; gap:10px;}
+.modal-btn{flex:1; padding:10px; border-radius:999px; font-size:13.5px; border:1px solid var(--border); background:var(--bg); color:var(--ink-soft);}
+.modal-btn.primary{background:var(--accent-sky); color:#fff; border:none;}
+
+.site-footer{border-top:1px solid var(--border); padding:32px 24px; text-align:center; color:var(--ink-faint); font-size:12px;}
+
+@media (max-width:520px){
+  .mood-btn{min-width:70px; padding:13px 6px;}
+  .duration-picker{flex-direction:column;}
+  .submit-row{flex-direction:column-reverse; align-items:stretch;}
+  .submit-btn{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-atmosphere"><span class="orb"></span><span class="orb"></span><span class="orb"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span></div>
+
+<svg class="icon-sprite" aria-hidden="true">
+  <symbol id="i-hole" viewBox="0 0 24 24"><path d="M6.2 4c-2.1 1.1-3.2 3.5-3.2 6.5 0 5.6 4 10.5 9 10.5s9-4.9 9-10.5c0-3-1.1-5.4-3.2-6.5"/><ellipse cx="12" cy="10.6" rx="3.6" ry="4.3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></symbol>
+  <symbol id="i-infinity" viewBox="0 0 24 24"><path d="M6.5 15.5a3.5 3.5 0 1 1 0-7c2.5 0 4 2.2 5.5 4.5s3 4.5 5.5 4.5a3.5 3.5 0 1 0 0-7c-2.5 0-4 2.2-5.5 4.5"/></symbol>
+  <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 3h6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-3-6-7-2Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="inner">
+    <a href="emotion-weather-station-global.html" class="logo">
+      <svg class="icon"><use href="#i-hole"/></svg>
+      树洞
+      <span class="sub">· 说出来，没关系</span>
+    </a>
+    <nav class="nav-links">
+      <a href="emotion-weather-station-global.html">首页广场</a>
+      <a href="campus-wall.html">校园墙</a>
+      <a href="emotion-weather-station-compose.html" class="active">发布心情</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换深色模式">
+      <svg class="icon icon-sun"><use href="#i-sun"/></svg>
+      <svg class="icon icon-moon"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="compose-wrap">
+  <div class="compose-head">
+    <h1>写下此刻的心情</h1>
+    <p>没关系，这里没有人认识你</p>
+  </div>
+
+  <form class="compose-card" id="composeForm" novalidate>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>今天的心情是</div>
+      <div class="mood-picker" id="moodPicker">
+        <button type="button" class="mood-btn" data-mood="happy"><span class="dot"></span><span class="label">开心</span></button>
+        <button type="button" class="mood-btn" data-mood="calm"><span class="dot"></span><span class="label">平静</span></button>
+        <button type="button" class="mood-btn" data-mood="sad"><span class="dot"></span><span class="label">难过</span></button>
+        <button type="button" class="mood-btn" data-mood="upset"><span class="dot"></span><span class="label">烦躁</span></button>
+        <button type="button" class="mood-btn" data-mood="anxious"><span class="dot"></span><span class="label">迷茫</span></button>
+      </div>
+      <div class="field-error" id="moodError"><svg class="icon"><use href="#i-alert"/></svg>选一个最贴近此刻的心情吧</div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>说说发生了什么</div>
+      <div class="textarea-wrap">
+        <textarea id="moodText" maxlength="500" placeholder="写下此刻的心情……"></textarea>
+        <span class="char-count" id="charCount">0 / 500</span>
+      </div>
+      <div class="field-error" id="textError"><svg class="icon"><use href="#i-alert"/></svg>请至少写下 5 个字</div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>暖心短句，一键加入</div>
+      <div class="phrase-list" id="phraseList">
+        <button type="button" class="phrase-chip">抱抱自己</button>
+        <button type="button" class="phrase-chip">今天辛苦了</button>
+        <button type="button" class="phrase-chip">会好起来的</button>
+        <button type="button" class="phrase-chip">谢谢自己没有放弃</button>
+        <button type="button" class="phrase-chip">深呼吸，慢慢来</button>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>选一个心情底色</div>
+      <div class="bg-picker" id="bgPicker">
+        <button type="button" class="bg-swatch selected" data-bg="paper" aria-label="纸白"></button>
+        <button type="button" class="bg-swatch" data-bg="sky" aria-label="天空蓝"></button>
+        <button type="button" class="bg-swatch" data-bg="dawn" aria-label="晨曦橙"></button>
+        <button type="button" class="bg-swatch" data-bg="mist" aria-label="薄雾紫"></button>
+        <button type="button" class="bg-swatch" data-bg="night" aria-label="深夜"></button>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label"><svg class="icon"><use href="#i-hole"/></svg>这条心情保留多久</div>
+      <div class="duration-picker" id="durationPicker">
+        <button type="button" class="duration-btn selected" data-duration="permanent"><svg class="icon"><use href="#i-infinity"/></svg>永久保留</button>
+        <button type="button" class="duration-btn" data-duration="24h"><svg class="icon"><use href="#i-timer"/></svg>24 小时后自动消失</button>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <span class="anon-note"><svg class="icon"><use href="#i-lock"/></svg>匿名发布，无人知道是你</span>
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="spinner"></span>
+        <svg class="icon btn-icon"><use href="#i-send"/></svg>
+        <span class="btn-text">放进风里</span>
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<footer class="site-footer">© 2026 树洞 · 每一句心里话，都值得被温柔对待</footer>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <svg class="modal-icon"><use href="#i-check"/></svg>
+    <h3>心情已经放进风里了</h3>
+    <p id="modalDesc">它会安静地待在广场上，等待被温柔看见。</p>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn" id="modalWrite">再写一条</button>
+      <button type="button" class="modal-btn primary" id="modalGo">去看广场</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const root = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ews-theme');
+if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) root.classList.add('dark');
+themeToggle.addEventListener('click', () => {
+  root.classList.toggle('dark');
+  localStorage.setItem('ews-theme', root.classList.contains('dark') ? 'dark' : 'light');
+});
+
+let selectedMood = null;
+let selectedBg = 'paper';
+let selectedDuration = 'permanent';
+
+const moodBtns = document.querySelectorAll('.mood-btn');
+const moodError = document.getElementById('moodError');
+moodBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    moodBtns.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedMood = btn.dataset.mood;
+    moodError.classList.remove('show');
+  });
+});
+
+const textarea = document.getElementById('moodText');
+const charCount = document.getElementById('charCount');
+const textError = document.getElementById('textError');
+const MIN_LEN = 5, MAX_LEN = 500;
+textarea.addEventListener('input', () => {
+  const len = textarea.value.length;
+  charCount.textContent = len + ' / ' + MAX_LEN;
+  charCount.classList.toggle('warn', len > MAX_LEN - 30);
+  if (len > 0) { textarea.classList.remove('invalid'); textError.classList.remove('show'); }
+});
+
+document.querySelectorAll('.phrase-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const text = chip.textContent.trim();
+    const sep = textarea.value.trim().length ? '，' : '';
+    textarea.value = (textarea.value.trim() + sep + text).slice(0, MAX_LEN);
+    textarea.dispatchEvent(new Event('input'));
+    textarea.focus();
+  });
+});
+
+document.querySelectorAll('.bg-swatch').forEach(sw => {
+  sw.addEventListener('click', () => {
+    document.querySelectorAll('.bg-swatch').forEach(s => s.classList.remove('selected'));
+    sw.classList.add('selected');
+    selectedBg = sw.dataset.bg;
+  });
+});
+
+document.querySelectorAll('.duration-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedDuration = btn.dataset.duration;
+  });
+});
+
+/* ==========================================================================
+   本地存储发布（演示用，真实接入后改为 fetch('/api/posts', { method:'POST', body: JSON.stringify(payload) })）
+   ========================================================================== */
+function saveLocalPost(payload){
+  let posts = [];
+  try { posts = JSON.parse(localStorage.getItem('treehole_posts') || '[]'); } catch(e){ posts = []; }
+  const newPost = {
+    id: 'local_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+    mood: payload.mood,
+    text: payload.content,
+    duration: payload.duration,
+    background: payload.background,
+    hugs: 0,
+    createdAt: Date.now()
+  };
+  posts.push(newPost);
+  try { localStorage.setItem('treehole_posts', JSON.stringify(posts)); } catch(e){ console.error('本地保存失败', e); }
+  return newPost.id;
+}
+
+function fakeSubmitToAPI(payload){
+  console.log('提交数据（示例，实际替换为真实接口调用）：', payload);
+  return new Promise(resolve => setTimeout(resolve, 900));
+}
+
+const form = document.getElementById('composeForm');
+const submitBtn = document.getElementById('submitBtn');
+const successModal = document.getElementById('successModal');
+const modalDesc = document.getElementById('modalDesc');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  let valid = true;
+
+  if (!selectedMood) { moodError.classList.add('show'); valid = false; }
+  const textLen = textarea.value.trim().length;
+  if (textLen < MIN_LEN) {
+    textarea.classList.add('invalid');
+    textError.classList.add('show');
+    valid = false;
+  }
+  if (!valid) return;
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+
+  const payload = { mood:selectedMood, content:textarea.value.trim(), background:selectedBg, duration:selectedDuration };
+  await fakeSubmitToAPI(payload);
+  saveLocalPost(payload);
+
+  submitBtn.classList.remove('loading');
+  submitBtn.disabled = false;
+
+  modalDesc.textContent = selectedDuration === '24h'
+    ? '它会安静地待在广场上，24 小时后悄悄消失。'
+    : '它会安静地待在广场上，等待被温柔看见。';
+  successModal.classList.add('show');
+});
+
+document.getElementById('modalWrite').addEventListener('click', () => {
+  successModal.classList.remove('show');
+  form.reset();
+  moodBtns.forEach(b => b.classList.remove('selected'));
+  selectedMood = null;
+  charCount.textContent = '0 / ' + MAX_LEN;
+  textarea.classList.remove('invalid');
+});
+document.getElementById('modalGo').addEventListener('click', () => {
+  window.location.href = 'emotion-weather-station-global.html';
+});
+</script>
+
+</body>
+</html>
